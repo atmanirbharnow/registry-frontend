@@ -3,26 +3,36 @@
 
 import { useEffect, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApp, getApps } from 'firebase/app';
 
-// 🔑 YOUR FIREBASE CONFIG (auto-injected by Firebase App Hosting)
-// No need to hardcode — but we include it for clarity
+// 🔑 ONLY use Firebase auto-generated config — no client_id, no hardcoded values
 const firebaseConfig = {
-  apiKey: "AIzaSyCa5Jly0Y8Bk_bd3Yq7SCLtFYs8UP5ebsA",
-  authDomain: "earthcarbonregistry-1e6ba.firebaseapp.com",
-  projectId: "earthcarbonregistry-1e6ba",
-  storageBucket: "earthcarbonregistry-1e6ba.firebasestorage.app",
-  messagingSenderId: "217692090833",
-  appId: "1:217692090833:web:23be9c18af75a0382870f0"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase only once
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [location, setLocation] = useState({ lat: null, lng: null, error: null });
+  const [formData, setFormData] = useState({
+    actionType: 'tree_planted',
+    notes: '',
+    manualLat: '',
+    manualLng: '',
+  });
+  const [submitStatus, setSubmitStatus] = useState(null);
 
+  // Handle auth state
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -31,18 +41,62 @@ export default function Dashboard() {
     return unsubscribe;
   }, []);
 
+  // Auto-capture location
+  useEffect(() => {
+    if (user && !location.lat) {
+      setGeoLoading(true);
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ lat: latitude, lng: longitude, error: null });
+            setFormData((prev) => ({ ...prev, manualLat: latitude, manualLng: longitude }));
+            setGeoLoading(false);
+          },
+          (error) => {
+            setLocation({ lat: null, lng: null, error: "Location access denied." });
+            setGeoLoading(false);
+          }
+        );
+      } else {
+        setLocation({ lat: null, lng: null, error: "Geolocation not supported." });
+        setGeoLoading(false);
+      }
+    }
+  }, [user, location.lat]);
+
   const handleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      // 🔒 Firebase uses the correct Web OAuth client automatically
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Sign-in error:", error);
-      alert("Sign-in failed: " + error.message);
+      alert("Sign-in failed: " + (error.message || "Please try again."));
     }
   };
 
-  const handleSignOut = () => {
-    signOut(auth);
+  const handleSignOut = () => signOut(auth);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const lat = parseFloat(formData.manualLat) || location.lat;
+    const lng = parseFloat(formData.manualLng) || location.lng;
+
+    if (!lat || !lng) {
+      setSubmitStatus("Please allow location or enter coordinates.");
+      return;
+    }
+
+    // 🔜 Later: send to Firestore via secure API route
+    console.log("Action logged (demo):", { userId: user.uid, ...formData, location: { lat, lng } });
+    setSubmitStatus("✅ Action logged! (Demo mode)");
+    setTimeout(() => setSubmitStatus(null), 3000);
   };
 
   if (loading) {
@@ -55,7 +109,7 @@ export default function Dashboard() {
         <div className="text-center max-w-md">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Earth Carbon Registry</h1>
           <p className="text-gray-600 mb-6">
-            Join India’s Atmanirbhar climate movement. Log, verify, and visualize your low-carbon actions.
+            Log and verify your low-carbon actions with geotagged proof.
           </p>
           <button
             onClick={handleSignIn}
@@ -69,9 +123,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto">
       <header className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">Welcome, {user.displayName}!</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Earth Carbon Registry</h1>
         <button
           onClick={handleSignOut}
           className="text-sm text-gray-500 hover:text-gray-700"
@@ -80,29 +134,93 @@ export default function Dashboard() {
         </button>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Total Actions</p>
-          <p className="text-2xl font-bold">0</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-500">CO₂ Saved</p>
-          <p className="text-2xl font-bold">0 kg</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Current Streak</p>
-          <p className="text-2xl font-bold">0 days</p>
-        </div>
+      <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+        <h2 className="text-xl font-semibold mb-4">Log a New Eco-Action</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Action Type</label>
+            <select
+              name="actionType"
+              value={formData.actionType}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+            >
+              <option value="tree_planted">🌳 Tree Planted</option>
+              <option value="plastic_avoided">♻️ Plastic Avoided</option>
+              <option value="water_saved">💧 Water Saved</option>
+              <option value="energy_saved">⚡ Energy Saved</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Location (Auto-captured)</label>
+            {geoLoading ? (
+              <p className="text-gray-500">Detecting your location...</p>
+            ) : location.error ? (
+              <p className="text-red-600 text-sm">{location.error}</p>
+            ) : (
+              <p className="text-sm text-gray-600">
+                {location.lat?.toFixed(5)}, {location.lng?.toFixed(5)}
+              </p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Latitude (override)</label>
+              <input
+                type="number"
+                name="manualLat"
+                value={formData.manualLat}
+                onChange={handleInputChange}
+                step="0.00001"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                placeholder="e.g. 23.0225"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Longitude (override)</label>
+              <input
+                type="number"
+                name="manualLng"
+                value={formData.manualLng}
+                onChange={handleInputChange}
+                step="0.00001"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                placeholder="e.g. 72.5714"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Notes (optional)</label>
+            <textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleInputChange}
+              rows={2}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              placeholder="e.g. Neem sapling near home"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
+          >
+            Log This Action
+          </button>
+
+          {submitStatus && (
+            <div className={`mt-2 p-2 rounded text-center ${submitStatus.startsWith('Error') ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+              {submitStatus}
+            </div>
+          )}
+        </form>
       </div>
 
-      <div className="bg-gray-100 h-96 rounded-lg flex items-center justify-center">
-        <p className="text-gray-500">Interactive map of your geotagged eco-actions (coming soon)</p>
-      </div>
-
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-        <p className="text-blue-800">
-          💡 <strong>Next step:</strong> Click “Log Action” to record your first tree planted, plastic avoided, or energy saved.
-        </p>
+      <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
+        <p className="text-gray-500">✅ Your geotagged actions will appear on this map soon!</p>
       </div>
     </div>
   );
