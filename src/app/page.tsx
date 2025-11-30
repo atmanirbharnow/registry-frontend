@@ -2,10 +2,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
 import { initializeApp, getApp, getApps } from 'firebase/app';
 
-// 🔑 ONLY use Firebase auto-generated config — no client_id, no hardcoded values
+// 🔑 Use only Firebase auto-generated config (from .env.local)
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -15,24 +15,27 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase only once
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [geoLoading, setGeoLoading] = useState(false);
-  const [location, setLocation] = useState({ lat: null, lng: null, error: null });
+  const [location, setLocation] = useState<{ lat: number | null; lng: number | null; error: string | null }>({
+    lat: null,
+    lng: null,
+    error: null,
+  });
   const [formData, setFormData] = useState({
     actionType: 'tree_planted',
     notes: '',
     manualLat: '',
     manualLng: '',
   });
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<string | null>(null);
 
-  // Handle auth state
+  // Auth state listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -41,7 +44,7 @@ export default function Dashboard() {
     return unsubscribe;
   }, []);
 
-  // Auto-capture location
+  // Auto-capture location when user logs in
   useEffect(() => {
     if (user && !location.lat) {
       setGeoLoading(true);
@@ -50,16 +53,17 @@ export default function Dashboard() {
           (position) => {
             const { latitude, longitude } = position.coords;
             setLocation({ lat: latitude, lng: longitude, error: null });
-            setFormData((prev) => ({ ...prev, manualLat: latitude, manualLng: longitude }));
+            setFormData((prev) => ({ ...prev, manualLat: String(latitude), manualLng: String(longitude) }));
             setGeoLoading(false);
           },
           (error) => {
-            setLocation({ lat: null, lng: null, error: "Location access denied." });
+            console.error('Geolocation error:', error);
+            setLocation({ lat: null, lng: null, error: 'Location access denied or unavailable.' });
             setGeoLoading(false);
           }
         );
       } else {
-        setLocation({ lat: null, lng: null, error: "Geolocation not supported." });
+        setLocation({ lat: null, lng: null, error: 'Geolocation not supported by your browser.' });
         setGeoLoading(false);
       }
     }
@@ -68,39 +72,88 @@ export default function Dashboard() {
   const handleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      // 🔒 Firebase uses the correct Web OAuth client automatically
       await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Sign-in error:", error);
-      alert("Sign-in failed: " + (error.message || "Please try again."));
+    } catch (error: any) {
+      console.error('Sign-in error:', error);
+      alert('Sign-in failed: ' + (error.message || 'Please try again.'));
     }
   };
 
-  const handleSignOut = () => signOut(auth);
+  const handleSignOut = () => {
+    signOut(auth);
+  };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitStatus(null);
+
     const lat = parseFloat(formData.manualLat) || location.lat;
     const lng = parseFloat(formData.manualLng) || location.lng;
 
-    if (!lat || !lng) {
-      setSubmitStatus("Please allow location or enter coordinates.");
+    if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
+      setSubmitStatus('Please allow location access or enter valid coordinates.');
       return;
     }
 
-    // 🔜 Later: send to Firestore via secure API route
-    console.log("Action logged (demo):", { userId: user.uid, ...formData, location: { lat, lng } });
-    setSubmitStatus("✅ Action logged! (Demo mode)");
-    setTimeout(() => setSubmitStatus(null), 3000);
+    if (!user) {
+      setSubmitStatus('You must be signed in to log an action.');
+      return;
+    }
+
+    try {
+      // Get ID token for secure API authentication
+      const idToken = await user.getIdToken();
+
+      const response = await fetch('/api/log-action', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          actionType: formData.actionType,
+          notes: formData.notes,
+          location: {
+            latitude: lat,
+            longitude: lng,
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitStatus('✅ Action successfully saved to the registry!');
+        // Reset form but keep location
+        setFormData({
+          actionTime: 'tree_planted',
+          notes: '',
+          manualLat: String(lat),
+          manualLng: String(lng),
+        });
+      } else {
+        setSubmitStatus(`❌ Save failed: ${result.error || 'Unknown error'}`);
+      }
+    } catch (error: any) {
+      console.error('Submission error:', error);
+      setSubmitStatus(`❌ Network error: ${error.message || 'Please check your connection.'}`);
+    }
+
+    // Clear status after 4 seconds
+    setTimeout(() => setSubmitStatus(null), 4000);
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Loading Earth Carbon Registry...</p>
+      </div>
+    );
   }
 
   if (!user) {
@@ -109,7 +162,7 @@ export default function Dashboard() {
         <div className="text-center max-w-md">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Earth Carbon Registry</h1>
           <p className="text-gray-600 mb-6">
-            Log and verify your low-carbon actions with geotagged proof.
+            Join India’s Atmanirbhar climate movement. Log, verify, and visualize your low-carbon actions with geotagged proof.
           </p>
           <button
             onClick={handleSignIn}
@@ -200,19 +253,24 @@ export default function Dashboard() {
               onChange={handleInputChange}
               rows={2}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              placeholder="e.g. Neem sapling near home"
+              placeholder="e.g. Neem sapling planted near home"
             />
           </div>
 
           <button
             type="submit"
             className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
+            disabled={!!submitStatus?.includes('Saving')}
           >
             Log This Action
           </button>
 
           {submitStatus && (
-            <div className={`mt-2 p-2 rounded text-center ${submitStatus.startsWith('Error') ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+            <div
+              className={`mt-2 p-2 rounded text-center text-sm ${
+                submitStatus.startsWith('✅') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              }`}
+            >
               {submitStatus}
             </div>
           )}
@@ -221,6 +279,10 @@ export default function Dashboard() {
 
       <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
         <p className="text-gray-500">✅ Your geotagged actions will appear on this map soon!</p>
+      </div>
+
+      <div className="mt-6 text-center text-sm text-gray-500">
+        Logged in as: {user.email}
       </div>
     </div>
   );
