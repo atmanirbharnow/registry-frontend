@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
 import { initializeApp, getApp, getApps } from 'firebase/app';
 
-// 🔑 Use only Firebase auto-generated config (from .env.local)
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -35,7 +34,6 @@ export default function Dashboard() {
   });
   const [submitStatus, setSubmitStatus] = useState<string | null>(null);
 
-  // Auth state listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -44,7 +42,6 @@ export default function Dashboard() {
     return unsubscribe;
   }, []);
 
-  // Auto-capture location when user logs in
   useEffect(() => {
     if (user && !location.lat) {
       setGeoLoading(true);
@@ -57,13 +54,12 @@ export default function Dashboard() {
             setGeoLoading(false);
           },
           (error) => {
-            console.error('Geolocation error:', error);
-            setLocation({ lat: null, lng: null, error: 'Location access denied or unavailable.' });
+            setLocation({ lat: null, lng: null, error: 'Location access denied.' });
             setGeoLoading(false);
           }
         );
       } else {
-        setLocation({ lat: null, lng: null, error: 'Geolocation not supported by your browser.' });
+        setLocation({ lat: null, lng: null, error: 'Geolocation not supported.' });
         setGeoLoading(false);
       }
     }
@@ -74,14 +70,11 @@ export default function Dashboard() {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (error: any) {
-      console.error('Sign-in error:', error);
       alert('Sign-in failed: ' + (error.message || 'Please try again.'));
     }
   };
 
-  const handleSignOut = () => {
-    signOut(auth);
-  };
+  const handleSignOut = () => signOut(auth);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -90,8 +83,6 @@ export default function Dashboard() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitStatus(null);
-
     const lat = parseFloat(formData.manualLat) || location.lat;
     const lng = parseFloat(formData.manualLng) || location.lng;
 
@@ -106,9 +97,7 @@ export default function Dashboard() {
     }
 
     try {
-      // Get ID token for secure API authentication
       const idToken = await user.getIdToken();
-
       const response = await fetch('/api/log-action', {
         method: 'POST',
         headers: {
@@ -118,20 +107,15 @@ export default function Dashboard() {
         body: JSON.stringify({
           actionType: formData.actionType,
           notes: formData.notes,
-          location: {
-            latitude: lat,
-            longitude: lng,
-          },
+          location: { latitude: lat, longitude: lng },
         }),
       });
 
       const result = await response.json();
-
       if (response.ok && result.success) {
         setSubmitStatus('✅ Action successfully saved to the registry!');
-        // Reset form but keep location
         setFormData({
-          actionTime: 'tree_planted',
+          actionType: 'tree_planted',
           notes: '',
           manualLat: String(lat),
           manualLng: String(lng),
@@ -140,20 +124,14 @@ export default function Dashboard() {
         setSubmitStatus(`❌ Save failed: ${result.error || 'Unknown error'}`);
       }
     } catch (error: any) {
-      console.error('Submission error:', error);
-      setSubmitStatus(`❌ Network error: ${error.message || 'Please check your connection.'}`);
+      setSubmitStatus(`❌ Network error: ${error.message || 'Check connection.'}`);
     }
 
-    // Clear status after 4 seconds
     setTimeout(() => setSubmitStatus(null), 4000);
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>Loading Earth Carbon Registry...</p>
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
   if (!user) {
@@ -162,7 +140,7 @@ export default function Dashboard() {
         <div className="text-center max-w-md">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Earth Carbon Registry</h1>
           <p className="text-gray-600 mb-6">
-            Join India’s Atmanirbhar climate movement. Log, verify, and visualize your low-carbon actions with geotagged proof.
+            Log and verify your low-carbon actions with geotagged proof.
           </p>
           <button
             onClick={handleSignIn}
@@ -179,10 +157,7 @@ export default function Dashboard() {
     <div className="p-6 max-w-4xl mx-auto">
       <header className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-800">Earth Carbon Registry</h1>
-        <button
-          onClick={handleSignOut}
-          className="text-sm text-gray-500 hover:text-gray-700"
-        >
+        <button onClick={handleSignOut} className="text-sm text-gray-500 hover:text-gray-700">
           Sign out
         </button>
       </header>
@@ -253,24 +228,19 @@ export default function Dashboard() {
               onChange={handleInputChange}
               rows={2}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              placeholder="e.g. Neem sapling planted near home"
+              placeholder="e.g. Neem sapling near home"
             />
           </div>
 
           <button
             type="submit"
             className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
-            disabled={!!submitStatus?.includes('Saving')}
           >
             Log This Action
           </button>
 
           {submitStatus && (
-            <div
-              className={`mt-2 p-2 rounded text-center text-sm ${
-                submitStatus.startsWith('✅') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-              }`}
-            >
+            <div className={`mt-2 p-2 rounded text-center text-sm ${submitStatus.startsWith('✅') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
               {submitStatus}
             </div>
           )}
@@ -279,10 +249,6 @@ export default function Dashboard() {
 
       <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
         <p className="text-gray-500">✅ Your geotagged actions will appear on this map soon!</p>
-      </div>
-
-      <div className="mt-6 text-center text-sm text-gray-500">
-        Logged in as: {user.email}
       </div>
     </div>
   );
