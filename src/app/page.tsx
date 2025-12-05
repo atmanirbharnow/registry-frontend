@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   const handleSignOut = () => signOut(auth);
 
-  if (loading) return <div className="p-6">Loading Earth Carbon Registry...</div>;
+  if (loading) return <div className="p-6">Loading...</div>;
 
   if (!user) {
     return (
@@ -63,12 +63,10 @@ export default function Dashboard() {
         </button>
       </header>
 
-      <div className="bg-blue-50 p-6 rounded-lg mb-8">
-        <h2 className="text-xl font-semibold mb-4">✅ CUSTOM DASHBOARD IS LIVE</h2>
-        <p className="text-gray-700">If you see this, your code is working!</p>
-        <div className="mt-4 p-4 bg-green-50 rounded">
-          <strong>Next:</strong> Add full "Log Action" form after confirming this appears.
-        </div>
+      <div className="bg-blue-50 p-6 rounded-lg">
+        <h2 className="text-xl font-semibold mb-2">✅ Custom Dashboard Loaded</h2>
+        <p>Welcome, <strong>{user.displayName}</strong>!</p>
+        <p className="mt-2">This confirms your code is working.</p>
       </div>
     </div>
   );
