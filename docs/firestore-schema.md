@@ -120,7 +120,7 @@ Replace the placeholder values:
 NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=registry-backbone.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=registry-backbone
-SEED_KEY=mySecretSeedKey2024!
+SEED_KEY=mySecretSeedKey2026!
 ```
 
 ### ⚠️ Important Security Notes:
