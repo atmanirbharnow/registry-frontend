@@ -1,6 +1,0 @@
-firebase functions:config:set next_public.api_key="AIzaSyBcZKWpdi1nCG9_fR6tOANF-CsDS-EChf0"
-firebase functions:config:set next_public.auth_domain="earthcarbonregistry-1e6ba.firebaseapp.com"
-firebase functions:config:set next_public.project_id="earthcarbonregistry-1e6ba"
-firebase functions:config:set next_public.storage_bucket="earthcarbonregistry-1e6ba.appspot.com"
-firebase functions:config:set next_public.messaging_sender_id="525866864149"
-firebase functions:config:set next_public.app_id="1:525866864149:web:3316cbb4f5008e83c7081c"
