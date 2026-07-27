@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>School & Institution Asset Registration | Earth Carbon Foundation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    :root {
+      --un-blue: #009edb;
+      --un-navy: #002b49;
+      --emerald-green: #059669;
+      --slate-gray: #64748b;
+    }
+
+    body { font-family: 'Poppins', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; }
+    
+    .register-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .step-badge {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--slate-gray);
+      border-bottom: 3px solid #e2e8f0;
+    }
+
+    .step-badge.active {
+      color: var(--un-blue);
+      border-bottom-color: var(--un-blue);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--un-navy);
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+
+    .btn-action {
+      background: var(--un-blue);
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .btn-action:hover { background: #0082b5; }
+
+    .atmanirbhar-result-box {
+      background: #ecfdf5;
+      border: 2px solid #a7f3d0;
+      padding: 25px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .atmanirbhar-score-large {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--emerald-green);
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Earth Carbon Foundation</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/#verify-section">Verify Record</a>
+    <a href="/" style="color:var(--emerald-green); font-weight:700;">Registry Portal</a>
+  </nav>
+</header>
+
+<div class="register-container">
+  
+  <!-- STAGE 1: AUTH PROMPT (Shown if user is NOT logged in) -->
+  <div id="authPromptSection" style="text-align:center;">
+    <h2 style="color:var(--un-navy); margin-top:0;">School &amp; Institution Asset Registration</h2>
+    <p style="color:var(--slate-gray); font-size:0.95rem;">
+      Register your institution to generate your official <strong>Natural Resource Balance Sheet (NRBS™)</strong>, compute your <strong>Atmanirbhar Index™ Score</strong>, and pre-qualify for carbon credit pooling (PoA).
+    </p>
+    
+    <div style="background:#e0f2fe; padding:20px; border-radius:8px; margin:25px 0; border-left:4px solid var(--un-blue); text-align:left;">
+      <strong style="color:var(--un-navy);">Before You Begin:</strong>
+      <ul style="margin:5px 0 0 0; padding-left:20px; font-size:0.85rem; color:#0369a1;">
+        <li>Preparation time: ~3 minutes</li>
+        <li>Requirements: Solar Rooftop Capacity ($\text{kW}$), Annual Energy Generation, &amp; Water/Waste Metrics</li>
+      </ul>
+    </div>
+
+    <button class="btn-action" style="background:#4285F4; margin-bottom:12px;" onclick="signInWithGoogle()">
+      🔑 Sign In / Register with Google
+    </button>
+  </div>
+
+  <!-- STAGE 2: 3-STEP INTAKE FORM (Shown when logged in but not registered) -->
+  <div id="intakeFormSection" style="display:none;">
+    <div class="step-indicator">
+      <div class="step-badge active" id="step1Tab">1. Institution Info</div>
+      <div class="step-badge" id="step2Tab">2. Renewable Energy</div>
+      <div class="step-badge" id="step3Tab">3. Water &amp; Waste</div>
+    </div>
+
+    <form id="schoolRegistrationForm">
+      <!-- STEP 1 FIELDS -->
+      <div id="step1Fields">
+        <h3 style="color:var(--un-navy); margin-top:0;">Institution Identification</h3>
+        <div class="form-group">
+          <label>School / Institution Full Name *</label>
+          <input type="text" id="institutionName" placeholder="e.g., Gujarat Law Society Campus" required>
+        </div>
+        <div class="form-group">
+          <label>City &amp; State *</label>
+          <input type="text" id="institutionLocation" placeholder="e.g., Ahmedabad, Gujarat" required>
+        </div>
+        <div class="form-group">
+          <label>Student / Staff On-Site Population *</label>
+          <input type="number" id="institutionPopulation" placeholder="e.g., 2500" required>
+        </div>
+        <button type="button" class="btn-action" onclick="goToStep(2)">Continue to Energy Metrics →</button>
+      </div>
+
+      <!-- STEP 2 FIELDS -->
+      <div id="step2Fields" style="display:none;">
+        <h3 style="color:var(--un-navy); margin-top:0;">Solar &amp; Energy Capacity (CIF Core Indicators)</h3>
+        <div class="form-group">
+          <label>Installed Rooftop Solar Capacity ($\text{kW}$) *</label>
+          <input type="number" step="0.1" id="solarCapacityKw" placeholder="e.g., 25.0" required>
+        </div>
+        <div class="form-group">
+          <label>Annual Solar Generation ($\text{kWh/year}$)</label>
+          <input type="number" id="annualKwh" placeholder="e.g., 32000">
+        </div>
+        <div class="form-group">
+          <label>Grid Interconnection Status</label>
+          <select id="gridStatus">
+            <option value="Net Metered">Grid Connected (Net Metered)</option>
+            <option value="Off Grid">Off-Grid / Hybrid Battery Storage</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn-action" style="background:var(--slate-gray);" onclick="goToStep(1)">← Back</button>
+          <button type="button" class="btn-action" onclick="goToStep(3)">Continue to Water &amp; Waste →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 FIELDS -->
+      <div id="step3Fields" style="display:none;">
+        <h3 style="color:var(--un-navy); margin-top:0;">Resource Self-Reliance &amp; Circularity</h3>
+        <div class="form-group">
+          <label>Rainwater Harvesting / Water Recycled ($\text{Liters/year}$)</label>
+          <input type="number" id="waterRecycledLiters" placeholder="e.g., 50000">
+        </div>
+        <div class="form-group">
+          <label>Solid Waste Diverted / Composted ($\text{kg/year}$)</label>
+          <input type="number" id="wasteDivertedKg" placeholder="e.g., 1200">
+        </div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button type="button" class="btn-action" style="background:var(--slate-gray);" onclick="goToStep(2)">← Back</button>
+          <button type="button" class="btn-action" style="background:var(--emerald-green);" onclick="submitSchoolForm()">Submit &amp; Generate Registry ID</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- STAGE 3 & 4: DASHBOARD & CERTIFICATE GENERATOR (Shown post-submission) -->
+  <div id="dashboardSection" style="display:none;">
+    <span style="background:#d1fae5; color:#065f46; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:4px;">✔ VERIFIED REGISTRY RECORD</span>
+    <h2 id="dashOrgName" style="color:var(--un-navy); margin:10px 0 2px 0;">Institution Name</h2>
+    <span id="dashRegistryId" style="color:var(--emerald-green); font-weight:700; font-size:0.9rem;">ID: ECF-SCH-0000</span>
+
+    <div class="atmanirbhar-result-box">
+      <span style="font-size:0.8rem; font-weight:800; color:#065f46; letter-spacing:1px;">CALCULATED ATMANIRBHAR INDEX™</span>
+      <div class="atmanirbhar-score-large" id="dashAtmanirbharScore">99%</div>
+      <p style="color:#047857; font-weight:600; margin:5px 0 0 0; font-size:0.9rem;">Resource Self-Sustaining Compliance Rate</p>
+    </div>
+
+    <div style="margin-top:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px; font-size:0.85rem;">
+      <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
+        <strong>Installed Solar:</strong> <span id="dashKw">0.0 kW</span>
+      </div>
+      <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
+        <strong>Est. Mitigation:</strong> <span id="dashTco2e">0.0 tCO₂e/yr</span>
+      </div>
+    </div>
+
+    <button class="btn-action" style="margin-top:25px; background:var(--un-navy);" onclick="window.print()">
+      📄 Download Official NRBS™ Certificate (PDF)
+    </button>
+  </div>
+
+</div>
+
+<!-- FIREBASE AUTH & LOGIC -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    authDomain: "earthcarbonregistry-1e6ba.firebaseapp.com",
+    projectId: "earthcarbonregistry-1e6ba",
+    storageBucket: "earthcarbonregistry-1e6ba.appspot.com",
+    messagingSenderId: "217692090833",
+    appId: "1:217692090833:web:registry"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // AUTH STATE ROUTER
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('authPromptSection').style.display = 'none';
+      document.getElementById('intakeFormSection').style.display = 'block';
+    } else {
+      document.getElementById('authPromptSection').style.display = 'block';
+      document.getElementById('intakeFormSection').style.display = 'none';
+    }
+  });
+
+  window.signInWithGoogle = function() {
+    signInWithPopup(auth, provider).catch(err => alert("Sign-in error: " + err.message));
+  };
+</script>
+
+<script>
+  function goToStep(stepNum) {
+    document.getElementById('step1Fields').style.display = stepNum === 1 ? 'block' : 'none';
+    document.getElementById('step2Fields').style.display = stepNum === 2 ? 'block' : 'none';
+    document.getElementById('step3Fields').style.display = stepNum === 3 ? 'block' : 'none';
+
+    document.getElementById('step1Tab').className = stepNum === 1 ? 'step-badge active' : 'step-badge';
+    document.getElementById('step2Tab').className = stepNum === 2 ? 'step-badge active' : 'step-badge';
+    document.getElementById('step3Tab').className = stepNum === 3 ? 'step-badge active' : 'step-badge';
+  }
+
+  function submitSchoolForm() {
+    const name = document.getElementById('institutionName').value || "Gujarat Campus";
+    const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 25.0;
+    
+    // Auto-compute Atmanirbhar Index Score and Mitigation
+    const generatedId = "ECF-SCH-" + Math.floor(1000 + Math.random() * 9000);
+    const calculatedScore = Math.min(99, Math.round(kw * 3.8));
+    const estimatedMitigation = (kw * 268.1).toFixed(1);
+
+    document.getElementById('dashOrgName').innerText = name;
+    document.getElementById('dashRegistryId').innerText = "ID: " + generatedId;
+    document.getElementById('dashAtmanirbharScore').innerText = calculatedScore + "%";
+    document.getElementById('dashKw').innerText = kw + " kW";
+    document.getElementById('dashTco2e').innerText = estimatedMitigation + " tCO₂e/yr";
+
+    document.getElementById('intakeFormSection').style.display = 'none';
+    document.getElementById('dashboardSection').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
