@@ -145,6 +145,40 @@
       cursor: pointer;
     }
 
+    .nav-auth-btn {
+      background-color: var(--un-blue);
+      color: #fff !important;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-auth-btn:hover {
+      background-color: #0082b5;
+    }
+
+    /* Modal Styling for Registration / Sign-In */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 43, 73, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
     @media (max-width: 640px) {
       .tier-steps { flex-direction: column; align-items: flex-start; }
       .tier-arrow { display: none; }
@@ -160,7 +194,7 @@
     <a href="#process">Process</a>
     <a href="#poa-tracker">PoA Pipeline</a>
     <a href="#verify-section">Verify Asset</a>
-    <a href="/contact/">Contact</a>
+    <a href="/school-register" class="nav-auth-btn" id="authNavBtn">Register / Sign In</a>
   </nav>
 </header>
 
@@ -170,7 +204,7 @@
     <h2>Global Carbon Registry for Measurable Climate Action</h2>
     <p>100 Million Tons Emission Reduction by 2030 | Structured. Verified. Monetized.</p>
     <div>
-      <a class="btn" href="#verify-section">Register / Verify Asset</a>
+      <a class="btn" href="javascript:void(0)" onclick="handleRegisterRedirect()">Register Your Asset</a>
       <a class="btn secondary" href="#process">How It Works</a>
     </div>
   </div>
@@ -194,7 +228,7 @@
   </div>
 </section>
 
-<!-- POA CAPACITY BATCH TRACKER (NEW COMPONENT) -->
+<!-- POA CAPACITY BATCH TRACKER -->
 <section id="poa-tracker" class="section">
   <div class="container" style="max-width: 1200px; margin: 0 auto;">
     <div class="poa-tracker">
@@ -222,7 +256,7 @@
   </div>
 </section>
 
-<!-- LIVE ASSET VERIFICATION / INTERACTIVE DISPLAY (NEW / UPGRADED SECTION) -->
+<!-- LIVE ASSET VERIFICATION / INTERACTIVE DISPLAY -->
 <section id="verify-section" class="section bg-alt" style="background:#f8fafc; padding: 40px 15px;">
   <div class="container" style="max-width: 1200px; margin: 0 auto;">
     <h3>Asset Verification Portal</h3>
@@ -365,7 +399,7 @@
 <section class="cta">
   <h3>Start Your Carbon Asset Journey</h3>
   <p>Register, track and monetize your emission reductions</p>
-  <a class="btn" href="/contact/">Get Started</a>
+  <a class="btn" href="javascript:void(0)" onclick="handleRegisterRedirect()">Get Started</a>
 </section>
 
 <!-- FOOTER -->
@@ -374,9 +408,80 @@
   <p>One Earth. One Family. One Climate Responsibility.</p>
 </footer>
 
-<!-- FIREBASE / REGISTRY JS LOGIC -->
+<!-- AUTH & REGISTRATION REDIRECT MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <h3 style="color:var(--un-navy); margin-top:0;">Asset Registration & Auth Portal</h3>
+    <p style="color:#64748b; font-size:0.9rem;">Sign in to register your institution or access your NRBS™ Asset Certificates.</p>
+    <button class="btn" style="width:100%; margin-bottom:10px;" onclick="redirectToIntakeForm()">Proceed to School Registration (/school-register)</button>
+    <button class="btn secondary" style="width:100%;" onclick="closeAuthModal()">Close</button>
+  </div>
+</div>
+
+<!-- FIREBASE & AUTHENTICATION REDIRECT LOGIC -->
+<script type="module">
+  // Import Firebase Modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // Note: Replace with your Firebase Config object if custom variables are required
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "earthcarbonregistry-1e6ba.firebaseapp.com",
+    projectId: "earthcarbonregistry-1e6ba",
+    storageBucket: "earthcarbonregistry-1e6ba.appspot.com",
+    messagingSenderId: "217692090833",
+    appId: "1:217692090833:web:registry"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // POST-LOGGING AUTOMATIC FLOW ROUTER
+  onAuthStateChanged(auth, async (user) => {
+    const authBtn = document.getElementById('authNavBtn');
+    if (user) {
+      console.log("User logged in:", user.email);
+      if (authBtn) authBtn.innerText = "My Dashboard";
+      
+      // Check if user has completed intake profile
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists() || !userSnap.data().isRegistered) {
+          // New / Incomplete profile -> Auto-route to school registration form
+          if (window.location.pathname !== "/school-register") {
+            window.location.href = "/school-register";
+          }
+        }
+      } catch (err) {
+        console.warn("Firestore auth routing check:", err);
+      }
+    } else {
+      if (authBtn) authBtn.innerText = "Register / Sign In";
+    }
+  });
+
+  // Global Helper Functions
+  window.handleRegisterRedirect = function() {
+    window.location.href = "/school-register";
+  };
+
+  window.closeAuthModal = function() {
+    document.getElementById('authModal').style.display = 'none';
+  };
+
+  window.redirectToIntakeForm = function() {
+    window.location.href = "/school-register";
+  };
+</script>
+
 <script>
-  // Sample Lookup Logic for Testing & Firestore Integration
+  // Asset Lookup Logic for Public Verification
   function lookupRegistryAsset() {
     const inputId = document.getElementById('summaryIdInput').value.trim();
     if (!inputId) {
@@ -384,15 +489,12 @@
       return;
     }
     
-    // Simulating Firestore document fetch
     console.log("Fetching Registry Record for ID:", inputId);
-    
-    // Update UI elements dynamically
     document.getElementById('assetSummaryId').innerText = "ID: " + inputId.toUpperCase();
     alert("Record found for " + inputId.toUpperCase() + ". Verified metrics loaded.");
   }
 
-  // Export Batch File Function for Carbon Auditors (VVBs)
+  // Export Batch CSV Function
   function exportPoABatchCSV() {
     const csvData = [
       ["Registry_ID", "Site_Name", "Capacity_kW", "Annual_kWh", "Annual_tCO2e", "Tier_Status"],
