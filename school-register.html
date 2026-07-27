@@ -124,7 +124,7 @@
       <strong style="color:var(--un-navy);">Before You Begin:</strong>
       <ul style="margin:5px 0 0 0; padding-left:20px; font-size:0.85rem; color:#0369a1;">
         <li>Preparation time: ~3 minutes</li>
-        <li>Requirements: Solar Rooftop Capacity ($\text{kW}$), Annual Energy Generation, &amp; Water/Waste Metrics</li>
+        <li>Requirements: Solar Rooftop Capacity (kW), Annual Energy Generation, &amp; Water/Waste Metrics</li>
       </ul>
     </div>
 
@@ -164,12 +164,12 @@
       <div id="step2Fields" style="display:none;">
         <h3 style="color:var(--un-navy); margin-top:0;">Solar &amp; Energy Capacity (CIF Core Indicators)</h3>
         <div class="form-group">
-          <label>Installed Rooftop Solar Capacity ($\text{kW}$) *</label>
-          <input type="number" step="0.1" id="solarCapacityKw" placeholder="e.g., 25.0" required>
+          <label>Installed Rooftop Solar Capacity (kW) *</label>
+          <input type="number" step="0.1" id="solarCapacityKw" placeholder="e.g., 23.0" required>
         </div>
         <div class="form-group">
-          <label>Annual Solar Generation ($\text{kWh/year}$)</label>
-          <input type="number" id="annualKwh" placeholder="e.g., 32000">
+          <label>Annual Solar Generation (kWh/year)</label>
+          <input type="number" id="annualKwh" placeholder="e.g., 31050">
         </div>
         <div class="form-group">
           <label>Grid Interconnection Status</label>
@@ -188,11 +188,11 @@
       <div id="step3Fields" style="display:none;">
         <h3 style="color:var(--un-navy); margin-top:0;">Resource Self-Reliance &amp; Circularity</h3>
         <div class="form-group">
-          <label>Rainwater Harvesting / Water Recycled ($\text{Liters/year}$)</label>
+          <label>Rainwater Harvesting / Water Recycled (Liters/year)</label>
           <input type="number" id="waterRecycledLiters" placeholder="e.g., 50000">
         </div>
         <div class="form-group">
-          <label>Solid Waste Diverted / Composted ($\text{kg/year}$)</label>
+          <label>Solid Waste Diverted / Composted (kg/year)</label>
           <input type="number" id="wasteDivertedKg" placeholder="e.g., 1200">
         </div>
         <div style="display:flex; gap:10px; margin-top:20px;">
@@ -211,7 +211,7 @@
 
     <div class="atmanirbhar-result-box">
       <span style="font-size:0.8rem; font-weight:800; color:#065f46; letter-spacing:1px;">CALCULATED ATMANIRBHAR INDEX™</span>
-      <div class="atmanirbhar-score-large" id="dashAtmanirbharScore">99%</div>
+      <div class="atmanirbhar-score-large" id="dashAtmanirbharScore">97%</div>
       <p style="color:#047857; font-weight:600; margin:5px 0 0 0; font-size:0.9rem;">Resource Self-Sustaining Compliance Rate</p>
     </div>
 
@@ -277,19 +277,29 @@
 
   function submitSchoolForm() {
     const name = document.getElementById('institutionName').value || "Gujarat Campus";
-    const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 25.0;
+    const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 23.0;
     
-    // Auto-compute Atmanirbhar Index Score and Mitigation
+    // 1. Annual Energy Yield Estimate (~1350 kWh per kW per year)
+    const userKwh = parseFloat(document.getElementById('annualKwh').value);
+    const annualKwh = !isNaN(userKwh) && userKwh > 0 ? userKwh : (kw * 1350);
+    
+    // 2. Standard CEA / MoEF&CC Grid Baseline Mitigation Formula (0.716 kg CO2e / kWh)
+    const estimatedMitigation = ((annualKwh * 0.716) / 1000).toFixed(2);
+    
+    // 3. Atmanirbhar Index Calculation (% capped at 99%)
+    const calculatedScore = Math.min(99, Math.round(85 + (kw * 0.5)));
+    
+    // 4. Registry ID with standardized ECF-SCH prefix
     const generatedId = "ECF-SCH-" + Math.floor(1000 + Math.random() * 9000);
-    const calculatedScore = Math.min(99, Math.round(kw * 3.8));
-    const estimatedMitigation = (kw * 268.1).toFixed(1);
 
+    // Populate Certificate / Dashboard Output
     document.getElementById('dashOrgName').innerText = name;
     document.getElementById('dashRegistryId').innerText = "ID: " + generatedId;
     document.getElementById('dashAtmanirbharScore').innerText = calculatedScore + "%";
-    document.getElementById('dashKw').innerText = kw + " kW";
+    document.getElementById('dashKw').innerText = kw.toFixed(1) + " kW";
     document.getElementById('dashTco2e').innerText = estimatedMitigation + " tCO₂e/yr";
 
+    // Transition UI to Dashboard Output
     document.getElementById('intakeFormSection').style.display = 'none';
     document.getElementById('dashboardSection').style.display = 'block';
   }
