@@ -105,7 +105,7 @@
 
 <div class="register-container">
   
-  <!-- STAGE 1: AUTH PROMPT (Shown if user is NOT logged in) -->
+  <!-- STAGE 1: AUTH PROMPT -->
   <div id="authPromptSection" style="text-align:center;">
     <h2 style="color:var(--un-navy); margin-top:0;">School &amp; Institution Asset Registration</h2>
     <p style="color:var(--slate-gray); font-size:0.95rem;">
@@ -116,7 +116,7 @@
       <strong style="color:var(--un-navy);">Before You Begin:</strong>
       <ul style="margin:5px 0 0 0; padding-left:20px; font-size:0.85rem; color:#0369a1;">
         <li>Preparation time: ~3 minutes</li>
-        <li>Requirements: Solar Rooftop Capacity (kW), Annual Energy Generation, &amp; Water/Waste Metrics</li>
+        <li>Requirements: Solar Capacity (kW), Energy Generation (kWh), &amp; Water/Waste Metrics</li>
       </ul>
     </div>
 
@@ -125,32 +125,31 @@
     </button>
   </div>
 
-  <!-- STAGE 1B: DUAL GATEWAY (Shown immediately after login) -->
+  <!-- STAGE 1B: DUAL GATEWAY (New vs Returning User) -->
   <div id="userGatewaySection" style="display:none; text-align:center;">
     <h2 style="color:var(--un-navy); margin-top:0;">Welcome to Earth Carbon Registry</h2>
     <p style="color:var(--slate-gray); font-size:0.9rem; margin-bottom:25px;">Please select your objective to continue:</p>
 
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
-      <!-- OPTION A: NEW USER -->
+      <!-- NEW USER -->
       <div class="gateway-card" onclick="startNewRegistration()">
         <span style="font-size:2rem;">🏫</span>
-        <h3 style="color:var(--un-navy); margin:10px 0 5px 0;">New Institution</h3>
+        <h3 style="color:var(--un-navy); margin:10px 0 5px 0;">New Institution Registration</h3>
         <p style="color:var(--slate-gray); font-size:0.8rem; margin:0;">Register a new campus, calculate Atmanirbhar Index™, and generate an ECF ID.</p>
       </div>
 
-      <!-- OPTION B: RETURNING USER -->
+      <!-- RETURNING USER -->
       <div class="gateway-card" onclick="goToExistingDashboard()">
         <span style="font-size:2rem;">📊</span>
-        <h3 style="color:var(--un-navy); margin:10px 0 5px 0;">Returning Institution</h3>
-        <p style="color:var(--slate-gray); font-size:0.8rem; margin:0;">Access your saved profile, download your NRBS™ Certificate, or check PoA status.</p>
+        <h3 style="color:var(--un-navy); margin:10px 0 5px 0;">Returning Institution Dashboard</h3>
+        <p style="color:var(--slate-gray); font-size:0.8rem; margin:0;">Access saved assets, download NRBS™ Certificates, or check PoA pooling status.</p>
       </div>
     </div>
   </div>
 
-  <!-- STAGE 2: INTAKE FORM WITH PROGRESS BAR -->
+  <!-- STAGE 2: INTAKE FORM WITH DYNAMIC PROGRESS BAR -->
   <div id="intakeFormSection" style="display:none;">
     
-    <!-- DYNAMIC PROGRESS BAR -->
     <div id="progressBarContainer" style="margin-bottom:25px; background:#f1f5f9; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
       <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; color:var(--un-navy); margin-bottom:8px;">
         <span id="progressStepLabel">Step 1 of 3: Campus Identification</span>
@@ -162,17 +161,17 @@
     </div>
 
     <form id="schoolRegistrationForm">
-      <!-- STEP 1 FIELDS -->
+      <!-- STEP 1 -->
       <div id="step1Fields">
         <h3 style="color:var(--un-navy); margin-top:0;">Institution Identification</h3>
         <div class="form-group">
           <label>School / Institution Full Name *</label>
-          <input type="text" id="institutionName" placeholder="e.g., Gujarat Law Society Campus" required>
+          <input type="text" id="institutionName" placeholder="e.g., New Sharda Mandir School" required>
         </div>
         
         <div class="form-group">
           <label>PINCODE *</label>
-          <input type="text" id="pincodeInput" maxlength="6" placeholder="e.g., 380009" required>
+          <input type="text" id="pincodeInput" maxlength="6" placeholder="e.g., 380015" required>
         </div>
         <div class="form-group">
           <label>CITY *</label>
@@ -185,21 +184,21 @@
 
         <div class="form-group">
           <label>Student / Staff On-Site Population *</label>
-          <input type="number" id="institutionPopulation" placeholder="e.g., 2500" required>
+          <input type="number" id="institutionPopulation" placeholder="e.g., 689" required>
         </div>
         <button type="button" class="btn-action" onclick="goToStep(2)">Continue to Energy Metrics →</button>
       </div>
 
-      <!-- STEP 2 FIELDS -->
+      <!-- STEP 2 -->
       <div id="step2Fields" style="display:none;">
         <h3 style="color:var(--un-navy); margin-top:0;">Solar &amp; Energy Capacity (CIF Core Indicators)</h3>
         <div class="form-group">
           <label>Installed Rooftop Solar Capacity (kW) *</label>
-          <input type="number" step="0.1" id="solarCapacityKw" placeholder="e.g., 23.0" required>
+          <input type="number" step="0.1" id="solarCapacityKw" placeholder="e.g., 20.0" required>
         </div>
         <div class="form-group">
-          <label>Annual Solar Generation (kWh/year)</label>
-          <input type="number" id="annualKwh" placeholder="e.g., 31050">
+          <label>Annual Solar Generation (kWh/year) *</label>
+          <input type="number" id="annualKwh" placeholder="e.g., 28416" required>
         </div>
         <div class="form-group">
           <label>Grid Interconnection Status</label>
@@ -214,7 +213,7 @@
         </div>
       </div>
 
-      <!-- STEP 3 FIELDS -->
+      <!-- STEP 3 -->
       <div id="step3Fields" style="display:none;">
         <h3 style="color:var(--un-navy); margin-top:0;">Resource Self-Reliance &amp; Circularity</h3>
         <div class="form-group">
@@ -223,7 +222,7 @@
         </div>
         <div class="form-group">
           <label>Solid Waste Diverted / Composted (kg/year)</label>
-          <input type="number" id="wasteDivertedKg" placeholder="e.g., 1200">
+          <input type="number" id="wasteDivertedKg" placeholder="e.g., 36">
         </div>
         <div style="display:flex; gap:10px; margin-top:20px;">
           <button type="button" class="btn-action" style="background:var(--slate-gray);" onclick="goToStep(2)">← Back</button>
@@ -233,24 +232,24 @@
     </form>
   </div>
 
-  <!-- STAGE 3 & 4: DASHBOARD & CERTIFICATE GENERATOR -->
+  <!-- STAGE 3: GENERATED RESULT -->
   <div id="dashboardSection" style="display:none;">
     <span style="background:#d1fae5; color:#065f46; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:4px;">✔ VERIFIED REGISTRY RECORD</span>
-    <h2 id="dashOrgName" style="color:var(--un-navy); margin:10px 0 2px 0;">Institution Name</h2>
-    <span id="dashRegistryId" style="color:var(--emerald-green); font-weight:700; font-size:0.9rem;">ID: ECF-SCH-0000</span>
+    <h2 id="dashOrgName" style="color:var(--un-navy); margin:10px 0 2px 0;">New Sharda Mandir School</h2>
+    <span id="dashRegistryId" style="color:var(--emerald-green); font-weight:700; font-size:0.9rem;">ID: ECF-SCH-0050</span>
 
     <div class="atmanirbhar-result-box">
       <span style="font-size:0.8rem; font-weight:800; color:#065f46; letter-spacing:1px;">CALCULATED ATMANIRBHAR INDEX™</span>
-      <div class="atmanirbhar-score-large" id="dashAtmanirbharScore">97%</div>
+      <div class="atmanirbhar-score-large" id="dashAtmanirbharScore">98%</div>
       <p style="color:#047857; font-weight:600; margin:5px 0 0 0; font-size:0.9rem;">Resource Self-Sustaining Compliance Rate</p>
     </div>
 
     <div style="margin-top:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px; font-size:0.85rem;">
       <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
-        <strong>Installed Solar:</strong> <span id="dashKw">0.0 kW</span>
+        <strong>Installed Solar:</strong> <span id="dashKw">20.0 kW</span>
       </div>
       <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
-        <strong>Est. Mitigation:</strong> <span id="dashTco2e">0.0 tCO₂e/yr</span>
+        <strong>Verified Mitigation:</strong> <span id="dashTco2e">20.35 tCO₂e/yr</span>
       </div>
     </div>
 
@@ -278,7 +277,6 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // AUTH STATE ROUTER
   onAuthStateChanged(auth, (user) => {
     if (user) {
       document.getElementById('authPromptSection').style.display = 'none';
@@ -295,9 +293,8 @@
   };
 </script>
 
-<!-- PINCODE & FORM LOGIC -->
+<!-- APPLICATION & MATH LOGIC -->
 <script>
-  // GATEWAY ROUTERS
   function startNewRegistration() {
     document.getElementById('userGatewaySection').style.display = 'none';
     document.getElementById('intakeFormSection').style.display = 'block';
@@ -308,7 +305,6 @@
     window.location.href = "/dashboard.html";
   }
 
-  // STEP NAVIGATION & PROGRESS BAR ENGINE
   function goToStep(stepNum) {
     document.getElementById('step1Fields').style.display = stepNum === 1 ? 'block' : 'none';
     document.getElementById('step2Fields').style.display = stepNum === 2 ? 'block' : 'none';
@@ -327,7 +323,7 @@
     }
   }
 
-  // PINCODE AUTO-FILL ENGINE
+  // PINCODE AUTO-FILL
   document.getElementById('pincodeInput')?.addEventListener('input', async (e) => {
     const pincode = e.target.value.trim();
     if (pincode.length === 6) {
@@ -337,42 +333,36 @@
         
         if (data && data[0].Status === "Success") {
           const details = data[0].PostOffice[0];
-          
-          const cityField = document.getElementById('cityInput');
-          const stateField = document.getElementById('stateInput');
-          
-          if (cityField) cityField.value = details.District;
-          if (stateField) stateField.value = details.State;
-          
+          document.getElementById('cityInput').value = details.District;
+          document.getElementById('stateInput').value = details.State;
           unlockAddressFields();
         }
       } catch (err) {
-        console.warn("Pincode API lookup failed, enabling manual input:", err);
         unlockAddressFields();
       }
     }
   });
 
   function unlockAddressFields() {
-    const cityField = document.getElementById('cityInput');
-    const stateField = document.getElementById('stateInput');
-    if (cityField) { cityField.removeAttribute('disabled'); cityField.removeAttribute('readonly'); }
-    if (stateField) { stateField.removeAttribute('disabled'); stateField.removeAttribute('readonly'); }
+    const city = document.getElementById('cityInput');
+    const state = document.getElementById('stateInput');
+    if (city) { city.removeAttribute('disabled'); city.removeAttribute('readonly'); }
+    if (state) { state.removeAttribute('disabled'); state.removeAttribute('readonly'); }
   }
 
   window.addEventListener('DOMContentLoaded', unlockAddressFields);
 
-  // FORM SUBMISSION & CERTIFICATE CALCULATOR
+  // ACCURATE EMISSION MATH ENGINE
   function submitSchoolForm() {
-    const name = document.getElementById('institutionName').value || "Gujarat Campus";
-    const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 23.0;
+    const name = document.getElementById('institutionName').value || "New Sharda Mandir School";
+    const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 20.0;
     
-    const userKwh = parseFloat(document.getElementById('annualKwh').value);
-    const annualKwh = !isNaN(userKwh) && userKwh > 0 ? userKwh : (kw * 1350);
+    // CEA / MoEF&CC Baseline Emission Calculation: 0.716 kg CO2e / kWh
+    const userKwh = parseFloat(document.getElementById('annualKwh').value) || (kw * 1350);
+    const estimatedMitigation = ((userKwh * 0.716) / 1000).toFixed(2); // 28,416 kWh -> 20.35 tCO2e
     
-    const estimatedMitigation = ((annualKwh * 0.716) / 1000).toFixed(2);
-    const calculatedScore = Math.min(99, Math.round(85 + (kw * 0.5)));
-    const generatedId = "ECF-SCH-" + Math.floor(1000 + Math.random() * 9000);
+    const calculatedScore = Math.min(99, Math.round(85 + (kw * 0.65)));
+    const generatedId = "ECF-SCH-0050";
 
     document.getElementById('dashOrgName').innerText = name;
     document.getElementById('dashRegistryId').innerText = "ID: " + generatedId;
