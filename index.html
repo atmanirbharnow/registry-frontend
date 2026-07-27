@@ -7,23 +7,61 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* Inline CSS Extensions for Upgraded Registry Components */
     :root {
       --un-blue: #009edb;
       --un-navy: #002b49;
       --un-light-bg: #f0f8ff;
       --emerald-green: #059669;
-      --gov-border: #bfc1c3;
+      --slate-gray: #64748b;
     }
-    
-    .notice-banner {
-      background-color: #e0f2fe;
-      border-left: 5px solid var(--un-blue);
-      padding: 12px 20px;
+
+    /* Modern Hero & UX Elements */
+    .hero-btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .ux-flow-banner {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: -30px auto 30px auto;
+      max-width: 1100px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      position: relative;
+      z-index: 10;
+    }
+
+    .ux-flow-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      text-align: center;
+    }
+
+    .ux-step-card {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .ux-step-num {
+      background: var(--un-blue);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
       font-size: 0.85rem;
-      color: var(--un-navy);
-      margin-bottom: 25px;
-      border-radius: 4px;
+      margin: 0 auto 8px auto;
     }
 
     .tier-pipeline {
@@ -31,8 +69,7 @@
       border: 1px solid #cbd5e1;
       padding: 20px;
       border-radius: 8px;
-      margin: 25px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin: 20px 0;
     }
 
     .tier-steps {
@@ -44,12 +81,12 @@
     }
 
     .tier-step {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 700;
       padding: 8px 14px;
       border-radius: 20px;
       background: #f1f5f9;
-      color: #64748b;
+      color: var(--slate-gray);
     }
 
     .tier-step.active {
@@ -58,19 +95,12 @@
       border: 1px solid #34d399;
     }
 
-    .tier-arrow {
-      color: var(--un-blue);
-      font-weight: 800;
-      font-size: 1.2rem;
-    }
-
     .atmanirbhar-box {
       background: #ecfdf5;
       border: 1px solid #a7f3d0;
       padding: 20px;
       border-radius: 8px;
       text-align: center;
-      margin-bottom: 20px;
     }
 
     .atmanirbhar-score {
@@ -83,31 +113,15 @@
 
     .cif-metrics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
     }
 
     .cif-metric-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      padding: 15px;
+      padding: 12px;
       border-radius: 6px;
-    }
-
-    .cif-metric-title {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: #64748b;
-      letter-spacing: 0.05em;
-    }
-
-    .cif-metric-value {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--un-navy);
-      margin-top: 4px;
     }
 
     .poa-tracker {
@@ -120,8 +134,8 @@
 
     .progress-bar-bg {
       background: #1e293b;
-      height: 16px;
-      border-radius: 8px;
+      height: 14px;
+      border-radius: 7px;
       overflow: hidden;
       margin: 12px 0;
     }
@@ -129,146 +143,105 @@
     .progress-bar-fill {
       background: var(--un-blue);
       height: 100%;
-      width: 79%; /* Dynamically calculated */
-      transition: width 0.4s ease;
+      width: 79%;
     }
 
-    .btn-export {
+    .nav-portal-btn {
       background-color: var(--emerald-green);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-    }
-
-    .nav-auth-btn {
-      background-color: var(--un-blue);
-      color: #fff !important;
-      padding: 6px 14px;
+      color: #ffffff !important;
+      padding: 8px 18px;
       border-radius: 20px;
-      font-weight: 600;
-      transition: all 0.2s ease;
+      font-weight: 700;
     }
 
-    .nav-auth-btn:hover {
-      background-color: #0082b5;
-    }
-
-    /* Modal Styling for Registration / Sign-In */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 43, 73, 0.7);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-card {
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 8px;
-      max-width: 480px;
-      width: 90%;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      text-align: center;
+    .quick-sample-tag {
+      background: #e2e8f0;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--un-navy);
     }
 
     @media (max-width: 640px) {
       .tier-steps { flex-direction: column; align-items: flex-start; }
-      .tier-arrow { display: none; }
     }
   </style>
 </head>
 <body>
 
+<!-- NAVIGATION HEADER -->
 <header class="header">
   <h1>Earth Carbon Foundation</h1>
   <nav>
     <a href="#">Home</a>
-    <a href="#process">Process</a>
     <a href="#poa-tracker">PoA Pipeline</a>
-    <a href="#verify-section">Verify Asset</a>
-    <a href="/school-register" class="nav-auth-btn" id="authNavBtn">Register / Sign In</a>
+    <a href="#verify-section">Verify Certificate</a>
+    <a href="#process">Process</a>
+    <a href="/school-register" class="nav-portal-btn">School Portal / Sign In</a>
   </nav>
 </header>
 
-<!-- HERO -->
+<!-- HERO SECTION -->
 <section class="hero">
   <div class="hero-content">
-    <h2>Global Carbon Registry for Measurable Climate Action</h2>
-    <p>100 Million Tons Emission Reduction by 2030 | Structured. Verified. Monetized.</p>
-    <div>
-      <a class="btn" href="javascript:void(0)" onclick="handleRegisterRedirect()">Register Your Asset</a>
-      <a class="btn secondary" href="#process">How It Works</a>
+    <h2>Global Climate Registry for Institutions &amp; Renewable Energy</h2>
+    <p>Measure Your Atmanirbhar Index™ | Verify Baseline Emissions | Aggregate Carbon Credits</p>
+    <div class="hero-btn-group">
+      <a class="btn" href="/school-register" style="background: var(--emerald-green);">🏫 Register Your Institution</a>
+      <a class="btn secondary" href="#verify-section">🔍 Verify an Asset Record</a>
     </div>
   </div>
 </section>
 
-<!-- NOTICE BANNER -->
-<div class="container" style="max-width: 1200px; margin: 20px auto 0 auto; padding: 0 15px;">
-  <div class="notice-banner">
-    <strong>Asset Valuation &amp; Preparedness Notice:</strong> RegistryEarthCarbon.org tracks, verifies, and manages Environmental Assets across their lifecycle. Registered actions generate Natural Resource Balance Sheet (NRBS™) assets and Scope 2 compliance data while pre-qualifying small-scale installations for programmatic carbon credit pooling (PoA).
+<!-- UX THREE-STEP JOURNEY BANNER -->
+<div class="container" style="padding: 0 15px;">
+  <div class="ux-flow-banner">
+    <h4 style="text-align:center; color: var(--un-navy); margin: 0 0 15px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+      How Institution Registration Works
+    </h4>
+    <div class="ux-flow-steps">
+      <div class="ux-step-card">
+        <div class="ux-step-num">1</div>
+        <strong style="color:var(--un-navy); font-size: 0.9rem;">Sign In / Auth</strong>
+        <p style="font-size: 0.8rem; color: var(--slate-gray); margin: 5px 0 0 0;">Authenticate using Google or official institutional email.</p>
+      </div>
+      <div class="ux-step-card">
+        <div class="ux-step-num">2</div>
+        <strong style="color:var(--un-navy); font-size: 0.9rem;">Enter Baseline Metrics</strong>
+        <p style="font-size: 0.8rem; color: var(--slate-gray); margin: 5px 0 0 0;">Provide solar capacity (kW), generation, water, &amp; waste stats.</p>
+      </div>
+      <div class="ux-step-card">
+        <div class="ux-step-num">3</div>
+        <strong style="color:var(--un-navy); font-size: 0.9rem;">Instant Certificate &amp; ID</strong>
+        <p style="font-size: 0.8rem; color: var(--slate-gray); margin: 5px 0 0 0;">Get your verified Registry ID, Atmanirbhar Score, &amp; Certificate.</p>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- TRUST / CREDIBILITY -->
-<section class="section trust">
-  <h3>Built on Expertise &amp; Global Frameworks</h3>
-  <div class="grid">
-    <div class="card"><strong>14+ Years</strong><br>Climate &amp; GHG Expertise</div>
-    <div class="card"><strong>2500+</strong><br>Solar Applications</div>
-    <div class="card"><strong>4.5 MW+</strong><br>Aggregated Capacity</div>
-    <div class="card"><strong>Global</strong><br>Registry Vision</div>
-  </div>
-</section>
-
-<!-- POA CAPACITY BATCH TRACKER -->
-<section id="poa-tracker" class="section">
-  <div class="container" style="max-width: 1200px; margin: 0 auto;">
-    <div class="poa-tracker">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <h3 style="margin:0; color:#fff; font-size:1.4rem;">PoA Bundled Capacity Accumulator (Solar Cluster #04)</h3>
-        <button class="btn-export" onclick="exportPoABatchCSV()">📥 Export VVB/MDB Audit File (.CSV)</button>
-      </div>
-      <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 5px;">Aggregating decentralized sub-projects (25 kW–1000 kW) toward institutional carbon credit pooling threshold.</p>
-
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="poaProgressBar"></div>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight:600;">
-        <span>Current Pooled Capacity: <strong id="currentMwDisplay" style="color:#38bdf8;">11.85 MW</strong></span>
-        <span>Target Threshold: <strong>15.00 MW</strong> (79% Complete)</span>
-      </div>
-
-      <div style="margin-top: 15px; font-size: 0.85rem; color: #cbd5e1; display:flex; gap:20px; flex-wrap:wrap;">
-        <span><strong>Active CPAs:</strong> 142 Sites</span>
-        <span><strong>Cumulative Mitigation:</strong> 84,200 tCO₂e/yr</span>
-        <span><strong>MDB Framework:</strong> CIF Industry Decarbonization Aligned</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LIVE ASSET VERIFICATION / INTERACTIVE DISPLAY -->
+<!-- LIVE ASSET VERIFICATION PORTAL (PRIMARY TOOL) -->
 <section id="verify-section" class="section bg-alt" style="background:#f8fafc; padding: 40px 15px;">
-  <div class="container" style="max-width: 1200px; margin: 0 auto;">
-    <h3>Asset Verification Portal</h3>
-    <p style="text-align:center; color:#64748b; margin-bottom: 25px;">Search any SHA-256 verified asset record (e.g., ECF-SCH-0025)</p>
+  <div class="container" style="max-width: 1100px; margin: 0 auto;">
+    <h3 style="text-align:center; margin-bottom: 5px;">Public Asset Verification Portal</h3>
+    <p style="text-align:center; color: var(--slate-gray); margin-bottom: 20px; font-size: 0.9rem;">
+      Search any SHA-256 verified asset record to inspect its NRBS™ status and Atmanirbhar Index™ Score.
+    </p>
 
     <!-- SEARCH BAR -->
-    <div style="max-width: 600px; margin: 0 auto 30px auto; display:flex; gap:10px;">
+    <div style="max-width: 600px; margin: 0 auto 10px auto; display:flex; gap:10px;">
       <input type="text" id="summaryIdInput" placeholder="Enter Registry ID (e.g., ECF-SCH-0025)" style="flex:1; padding: 12px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.95rem;">
       <button class="btn" onclick="lookupRegistryAsset()" style="padding: 12px 24px;">Verify</button>
     </div>
 
-    <!-- VERIFIED ASSET CARD DISPLAY -->
+    <!-- QUICK SAMPLES -->
+    <div style="text-align:center; margin-bottom: 25px; font-size:0.8rem; color:var(--slate-gray);">
+      Try sample IDs: 
+      <span class="quick-sample-tag" onclick="loadSample('ECF-SCH-0025')">ECF-SCH-0025</span>
+      <span class="quick-sample-tag" onclick="loadSample('ECF-IND-0102')">ECF-IND-0102</span>
+    </div>
+
+    <!-- VERIFIED ASSET DISPLAY CARD -->
     <div id="registryDisplayCard" style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:25px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
       
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; border-bottom:1px solid #e2e8f0; padding-bottom:15px; margin-bottom:20px;">
@@ -278,27 +251,26 @@
           <span id="assetSummaryId" style="font-size:0.85rem; font-weight:700; color:var(--emerald-green);">ID: ECF-SCH-0025</span>
         </div>
         <div style="text-align:right;">
-          <span style="font-size:0.75rem; color:#64748b; block;">Cryptographic Hash</span>
+          <span style="font-size:0.75rem; color:var(--slate-gray); block;">Cryptographic Signature</span>
           <code style="font-size:0.75rem; background:#f1f5f9; padding:3px 6px; border-radius:4px; color:#334155;">0x8f3a9b2c...SHA-256</code>
         </div>
       </div>
 
-      <!-- 3-TIER PROGRESSION PIPELINE WIDGET -->
+      <!-- 3-TIER PROGRESSION PIPELINE -->
       <div class="tier-pipeline">
-        <h5 style="margin:0 0 10px 0; font-size:0.8rem; text-transform:uppercase; color:#64748b; letter-spacing:1px;">Asset Progression Status</h5>
+        <h5 style="margin:0 0 10px 0; font-size:0.75rem; text-transform:uppercase; color:var(--slate-gray); letter-spacing:1px;">Lifecycle Status</h5>
         <div class="tier-steps">
-          <div class="tier-step active">● Tier 1: Self-Reported Intake</div>
-          <div class="tier-arrow">→</div>
-          <div class="tier-step active">● Tier 2: NRBS™ Audit-Verified</div>
-          <div class="tier-arrow">→</div>
-          <div class="tier-step">○ Tier 3: PoA Credit Pooled</div>
+          <div class="tier-step active" id="tier1Tag">● Tier 1: Self-Reported Intake</div>
+          <div style="color:var(--un-blue); font-weight:800;">→</div>
+          <div class="tier-step active" id="tier2Tag">● Tier 2: NRBS™ Audit-Verified</div>
+          <div style="color:var(--un-blue); font-weight:800;">→</div>
+          <div class="tier-step" id="tier3Tag">○ Tier 3: PoA Credit Pooled</div>
         </div>
       </div>
 
       <!-- ATMANIRBHAR SCORECARD & CIF CORE METRICS -->
       <div style="display:grid; grid-template-columns: 1fr 2fr; gap:20px; flex-wrap:wrap;">
         
-        <!-- ATMANIRBHAR GAUGE -->
         <div class="atmanirbhar-box">
           <span style="font-size:0.75rem; font-weight:800; color:#065f46; letter-spacing:1px;">ATMANIRBHAR INDEX™</span>
           <div class="atmanirbhar-score" id="assetAtmanirbharScore">99%</div>
@@ -306,25 +278,24 @@
           <span style="font-size:0.75rem; color:#059669; margin-top:8px; display:block;">Energy: 100% | Water: 95%</span>
         </div>
 
-        <!-- CIF CORE INDICATORS GRID -->
         <div>
-          <h5 style="margin:0 0 10px 0; font-size:0.8rem; text-transform:uppercase; color:#64748b; letter-spacing:1px;">CIF Industry Decarbonization Metrics</h5>
+          <h5 style="margin:0 0 10px 0; font-size:0.75rem; text-transform:uppercase; color:var(--slate-gray); letter-spacing:1px;">CIF Decarbonization Indicators</h5>
           <div class="cif-metrics-grid">
             <div class="cif-metric-card">
-              <div class="cif-metric-title">Installed Capacity (ID Core 4)</div>
-              <div class="cif-metric-value" id="assetCapacity">23.00 kW</div>
+              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">INSTALLED CAPACITY</div>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetCapacity">23.00 kW</div>
             </div>
             <div class="cif-metric-card">
-              <div class="cif-metric-title">Annual Generation (ID Core 3)</div>
-              <div class="cif-metric-value" id="assetKwh">30,948 kWh/yr</div>
+              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">ANNUAL GENERATION</div>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetKwh">30,948 kWh/yr</div>
             </div>
             <div class="cif-metric-card">
-              <div class="cif-metric-title">Annual Mitigation (ID Core 1)</div>
-              <div class="cif-metric-value" id="assetTco2e">6,167 tCO₂e</div>
+              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">ANNUAL MITIGATION</div>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetTco2e">6,167 tCO₂e</div>
             </div>
             <div class="cif-metric-card">
-              <div class="cif-metric-title">Material Efficiency (ID Core 5)</div>
-              <div class="cif-metric-value" id="assetWaste">60 kg Waste Div.</div>
+              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">MATERIAL EFFICIENCY</div>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetWaste">60 kg Waste Div.</div>
             </div>
           </div>
         </div>
@@ -335,7 +306,6 @@
       <div style="margin-top:20px; padding-top:15px; border-top:1px dashed #cbd5e1; display:flex; gap:10px; flex-wrap:wrap; font-size:0.8rem;">
         <span style="background:#e0f2fe; color:var(--un-navy); padding:4px 10px; border-radius:4px; font-weight:600;">✔ Scope 2 Accounting</span>
         <span style="background:#e0f2fe; color:var(--un-navy); padding:4px 10px; border-radius:4px; font-weight:600;">✔ BRSR / GRI Aligned</span>
-        <span style="background:#e0f2fe; color:var(--un-navy); padding:4px 10px; border-radius:4px; font-weight:600;">✔ MoEF&amp;CC Baseline</span>
         <span style="background:#d1fae5; color:#065f46; padding:4px 10px; border-radius:4px; font-weight:600;">✔ PoA Batch Eligible (#04)</span>
       </div>
 
@@ -343,63 +313,26 @@
   </div>
 </section>
 
-<!-- PROCESS FLOW -->
-<section id="process" class="section">
-  <h3>Registry Process Flow</h3>
-  <div class="timeline">
-    <div class="step">
-      <h4>1. Measure</h4>
-      <p>Assess baseline emissions across energy, waste, and resources.</p>
-    </div>
-    <div class="step">
-      <h4>2. Structure</h4>
-      <p>Aggregate actions into registry-ready carbon assets (PoA / Bundling).</p>
-    </div>
-    <div class="step">
-      <h4>3. Verify</h4>
-      <p>Apply methodologies and validate emission reductions.</p>
-    </div>
-    <div class="step">
-      <h4>4. Issue Credits</h4>
-      <p>Generate carbon credits and unlock revenue streams.</p>
+<!-- PROGRAMMATIC CARBON ACCUMULATOR (POA TRACKER) -->
+<section id="poa-tracker" class="section">
+  <div class="container" style="max-width: 1100px; margin: 0 auto;">
+    <div class="poa-tracker">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <h3 style="margin:0; color:#fff; font-size:1.3rem;">PoA Bundled Capacity Accumulator (Cluster #04)</h3>
+        <button class="btn" style="background:var(--emerald-green); font-size:0.85rem; padding:8px 16px;" onclick="exportPoABatchCSV()">📥 Export VVB Audit File (.CSV)</button>
+      </div>
+      <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">Aggregating decentralized sub-projects (25 kW–1000 kW) toward institutional credit pooling.</p>
+
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill"></div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
+        <span>Current Pooled Capacity: <strong style="color:#38bdf8;">11.85 MW</strong></span>
+        <span>Target Threshold: <strong>15.00 MW</strong> (79% Complete)</span>
+      </div>
     </div>
   </div>
-</section>
-
-<!-- PROGRAMS -->
-<section id="programs" class="section">
-  <h3>Core Programs</h3>
-  <div class="grid">
-    <div class="card">
-      <h4>100 mTons Initiative</h4>
-      <p>Global aggregation of emission reduction actions targeting 100 million tons.</p>
-    </div>
-    <div class="card">
-      <h4>Carbon Registry</h4>
-      <p>Digital registry for tracking, reporting and validating climate actions.</p>
-    </div>
-    <div class="card">
-      <h4>SME &amp; Community Projects</h4>
-      <p>Enable small-scale participants to access carbon markets.</p>
-    </div>
-  </div>
-</section>
-
-<!-- IMPACT -->
-<section id="impact" class="section impact">
-  <h3>Projected Impact</h3>
-  <div class="grid">
-    <div class="card"><strong>100M Tons</strong><br>Target Reduction</div>
-    <div class="card"><strong>Multi-Sector</strong><br>Energy, Waste, Forestry</div>
-    <div class="card"><strong>Global Access</strong><br>Individuals to Enterprises</div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta">
-  <h3>Start Your Carbon Asset Journey</h3>
-  <p>Register, track and monetize your emission reductions</p>
-  <a class="btn" href="javascript:void(0)" onclick="handleRegisterRedirect()">Get Started</a>
 </section>
 
 <!-- FOOTER -->
@@ -408,105 +341,49 @@
   <p>One Earth. One Family. One Climate Responsibility.</p>
 </footer>
 
-<!-- AUTH & REGISTRATION REDIRECT MODAL -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal-card">
-    <h3 style="color:var(--un-navy); margin-top:0;">Asset Registration & Auth Portal</h3>
-    <p style="color:#64748b; font-size:0.9rem;">Sign in to register your institution or access your NRBS™ Asset Certificates.</p>
-    <button class="btn" style="width:100%; margin-bottom:10px;" onclick="redirectToIntakeForm()">Proceed to School Registration (/school-register)</button>
-    <button class="btn secondary" style="width:100%;" onclick="closeAuthModal()">Close</button>
-  </div>
-</div>
-
-<!-- FIREBASE & AUTHENTICATION REDIRECT LOGIC -->
-<script type="module">
-  // Import Firebase Modules
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  // Note: Replace with your Firebase Config object if custom variables are required
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "earthcarbonregistry-1e6ba.firebaseapp.com",
-    projectId: "earthcarbonregistry-1e6ba",
-    storageBucket: "earthcarbonregistry-1e6ba.appspot.com",
-    messagingSenderId: "217692090833",
-    appId: "1:217692090833:web:registry"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // POST-LOGGING AUTOMATIC FLOW ROUTER
-  onAuthStateChanged(auth, async (user) => {
-    const authBtn = document.getElementById('authNavBtn');
-    if (user) {
-      console.log("User logged in:", user.email);
-      if (authBtn) authBtn.innerText = "My Dashboard";
-      
-      // Check if user has completed intake profile
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (!userSnap.exists() || !userSnap.data().isRegistered) {
-          // New / Incomplete profile -> Auto-route to school registration form
-          if (window.location.pathname !== "/school-register") {
-            window.location.href = "/school-register";
-          }
-        }
-      } catch (err) {
-        console.warn("Firestore auth routing check:", err);
-      }
-    } else {
-      if (authBtn) authBtn.innerText = "Register / Sign In";
-    }
-  });
-
-  // Global Helper Functions
-  window.handleRegisterRedirect = function() {
-    window.location.href = "/school-register";
-  };
-
-  window.closeAuthModal = function() {
-    document.getElementById('authModal').style.display = 'none';
-  };
-
-  window.redirectToIntakeForm = function() {
-    window.location.href = "/school-register";
-  };
-</script>
-
+<!-- INTERACTIVE SCRIPTS -->
 <script>
-  // Asset Lookup Logic for Public Verification
+  function loadSample(sampleId) {
+    document.getElementById('summaryIdInput').value = sampleId;
+    lookupRegistryAsset();
+  }
+
   function lookupRegistryAsset() {
-    const inputId = document.getElementById('summaryIdInput').value.trim();
+    const inputId = document.getElementById('summaryIdInput').value.trim().toUpperCase();
     if (!inputId) {
       alert("Please enter a valid Registry ID");
       return;
     }
     
-    console.log("Fetching Registry Record for ID:", inputId);
-    document.getElementById('assetSummaryId').innerText = "ID: " + inputId.toUpperCase();
-    alert("Record found for " + inputId.toUpperCase() + ". Verified metrics loaded.");
+    document.getElementById('assetSummaryId').innerText = "ID: " + inputId;
+
+    if (inputId === 'ECF-IND-0102') {
+      document.getElementById('assetOrgName').innerText = "Baroda Heavy Industrial Facility Unit 2";
+      document.getElementById('assetCapacity').innerText = "500.00 kW";
+      document.getElementById('assetKwh').innerText = "720,000 kWh/yr";
+      document.getElementById('assetTco2e').innerText = "14,200 tCO₂e";
+      document.getElementById('assetWaste').innerText = "1,200 kg Waste Div.";
+      document.getElementById('assetAtmanirbharScore').innerText = "88%";
+    } else {
+      document.getElementById('assetOrgName').innerText = "Gujarat Law Society (Ellisbridge Campus)";
+      document.getElementById('assetCapacity').innerText = "23.00 kW";
+      document.getElementById('assetKwh').innerText = "30,948 kWh/yr";
+      document.getElementById('assetTco2e').innerText = "6,167 tCO₂e";
+      document.getElementById('assetWaste').innerText = "60 kg Waste Div.";
+      document.getElementById('assetAtmanirbharScore').innerText = "99%";
+    }
   }
 
-  // Export Batch CSV Function
   function exportPoABatchCSV() {
     const csvData = [
       ["Registry_ID", "Site_Name", "Capacity_kW", "Annual_kWh", "Annual_tCO2e", "Tier_Status"],
       ["ECF-SCH-0025", "GLS School", "23.0", "30948", "6167.4", "Tier 2"],
-      ["ECF-IND-0102", "Baroda Steel Unit 2", "500.0", "720000", "14200.0", "Tier 2"],
-      ["ECF-SCH-0310", "St. Xavier Campus", "45.0", "61000", "1210.0", "Tier 2"]
+      ["ECF-IND-0102", "Baroda Steel Unit 2", "500.0", "720000", "14200.0", "Tier 2"]
     ];
 
     let csvContent = "data:text/csv;charset=utf-8," + csvData.map(e => e.join(",")).join("\n");
-    let encodedUri = encodeURI(csvContent);
     let link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.setAttribute("href", encodeURI(csvContent));
     link.setAttribute("download", "PoA_Solar_Batch_04_Audit.csv");
     document.body.appendChild(link);
     link.click();
