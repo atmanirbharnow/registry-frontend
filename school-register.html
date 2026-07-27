@@ -149,10 +149,21 @@
           <label>School / Institution Full Name *</label>
           <input type="text" id="institutionName" placeholder="e.g., Gujarat Law Society Campus" required>
         </div>
+        
+        <!-- UPGRADED ADDRESS FIELDS WITH PINCODE AUTO-FILL -->
         <div class="form-group">
-          <label>City &amp; State *</label>
-          <input type="text" id="institutionLocation" placeholder="e.g., Ahmedabad, Gujarat" required>
+          <label>PINCODE *</label>
+          <input type="text" id="pincodeInput" maxlength="6" placeholder="e.g., 380009" required>
         </div>
+        <div class="form-group">
+          <label>CITY *</label>
+          <input type="text" id="cityInput" placeholder="Enter City (Auto-fills on pincode)" required>
+        </div>
+        <div class="form-group">
+          <label>STATE *</label>
+          <input type="text" id="stateInput" placeholder="Enter State (Auto-fills on pincode)" required>
+        </div>
+
         <div class="form-group">
           <label>Student / Staff On-Site Population *</label>
           <input type="number" id="institutionPopulation" placeholder="e.g., 2500" required>
@@ -231,7 +242,7 @@
 
 </div>
 
-<!-- FIREBASE AUTH & LOGIC -->
+<!-- FIREBASE AUTH LOGIC -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -264,7 +275,52 @@
   };
 </script>
 
+<!-- PINCODE & CERTIFICATE LOGIC -->
 <script>
+  // PINCODE AUTO-FILL & UNLOCK ENGINE
+  document.getElementById('pincodeInput')?.addEventListener('input', async (e) => {
+    const pincode = e.target.value.trim();
+    
+    if (pincode.length === 6) {
+      try {
+        const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+        const data = await response.json();
+        
+        if (data && data[0].Status === "Success") {
+          const details = data[0].PostOffice[0];
+          
+          const cityField = document.getElementById('cityInput');
+          const stateField = document.getElementById('stateInput');
+          
+          if (cityField) cityField.value = details.District;
+          if (stateField) stateField.value = details.State;
+          
+          unlockAddressFields();
+        }
+      } catch (err) {
+        console.warn("Pincode API lookup failed, enabling manual input:", err);
+        unlockAddressFields();
+      }
+    }
+  });
+
+  function unlockAddressFields() {
+    const cityField = document.getElementById('cityInput');
+    const stateField = document.getElementById('stateInput');
+    
+    if (cityField) {
+      cityField.removeAttribute('disabled');
+      cityField.removeAttribute('readonly');
+    }
+    if (stateField) {
+      stateField.removeAttribute('disabled');
+      stateField.removeAttribute('readonly');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', unlockAddressFields);
+
+  // STEP NAVIGATION
   function goToStep(stepNum) {
     document.getElementById('step1Fields').style.display = stepNum === 1 ? 'block' : 'none';
     document.getElementById('step2Fields').style.display = stepNum === 2 ? 'block' : 'none';
@@ -275,31 +331,24 @@
     document.getElementById('step3Tab').className = stepNum === 3 ? 'step-badge active' : 'step-badge';
   }
 
+  // FORM SUBMISSION & CERTIFICATE CALCULATION
   function submitSchoolForm() {
     const name = document.getElementById('institutionName').value || "Gujarat Campus";
     const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 23.0;
     
-    // 1. Annual Energy Yield Estimate (~1350 kWh per kW per year)
     const userKwh = parseFloat(document.getElementById('annualKwh').value);
     const annualKwh = !isNaN(userKwh) && userKwh > 0 ? userKwh : (kw * 1350);
     
-    // 2. Standard CEA / MoEF&CC Grid Baseline Mitigation Formula (0.716 kg CO2e / kWh)
     const estimatedMitigation = ((annualKwh * 0.716) / 1000).toFixed(2);
-    
-    // 3. Atmanirbhar Index Calculation (% capped at 99%)
     const calculatedScore = Math.min(99, Math.round(85 + (kw * 0.5)));
-    
-    // 4. Registry ID with standardized ECF-SCH prefix
     const generatedId = "ECF-SCH-" + Math.floor(1000 + Math.random() * 9000);
 
-    // Populate Certificate / Dashboard Output
     document.getElementById('dashOrgName').innerText = name;
     document.getElementById('dashRegistryId').innerText = "ID: " + generatedId;
     document.getElementById('dashAtmanirbharScore').innerText = calculatedScore + "%";
     document.getElementById('dashKw').innerText = kw.toFixed(1) + " kW";
     document.getElementById('dashTco2e').innerText = estimatedMitigation + " tCO₂e/yr";
 
-    // Transition UI to Dashboard Output
     document.getElementById('intakeFormSection').style.display = 'none';
     document.getElementById('dashboardSection').style.display = 'block';
   }
