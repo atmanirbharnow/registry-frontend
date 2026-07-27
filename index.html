@@ -10,384 +10,148 @@
     :root {
       --un-blue: #009edb;
       --un-navy: #002b49;
-      --un-light-bg: #f0f8ff;
       --emerald-green: #059669;
       --slate-gray: #64748b;
     }
 
-    /* Modern Hero & UX Elements */
-    .hero-btn-group {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .ux-flow-banner {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 20px;
-      margin: -30px auto 30px auto;
-      max-width: 1100px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      position: relative;
-      z-index: 10;
-    }
-
-    .ux-flow-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      text-align: center;
-    }
-
-    .ux-step-card {
-      background: #f8fafc;
-      padding: 15px;
-      border-radius: 6px;
-      border: 1px solid #f1f5f9;
-    }
-
-    .ux-step-num {
-      background: var(--un-blue);
+    body { font-family: 'Poppins', sans-serif; background: #f8fafc; margin: 0; color: #1e293b; }
+    
+    .hero-clean {
+      background: linear-gradient(135deg, var(--un-navy) 0%, #001a2c 100%);
       color: #fff;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      margin: 0 auto 8px auto;
-    }
-
-    .tier-pipeline {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-    }
-
-    .tier-steps {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .tier-step {
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 8px 14px;
-      border-radius: 20px;
-      background: #f1f5f9;
-      color: var(--slate-gray);
-    }
-
-    .tier-step.active {
-      background: #d1fae5;
-      color: #065f46;
-      border: 1px solid #34d399;
-    }
-
-    .atmanirbhar-box {
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      padding: 20px;
-      border-radius: 8px;
+      padding: 60px 20px;
       text-align: center;
     }
 
-    .atmanirbhar-score {
-      font-size: 2.75rem;
-      font-weight: 800;
-      color: var(--emerald-green);
-      line-height: 1;
-      margin: 5px 0;
-    }
+    .hero-clean h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+    .hero-clean p { font-size: 1.05rem; color: #cbd5e1; max-width: 700px; margin: 0 auto 25px auto; }
 
-    .cif-metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-
-    .cif-metric-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      padding: 12px;
+    .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    
+    .btn-main {
+      background: var(--emerald-green);
+      color: #fff;
+      padding: 12px 26px;
       border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
     }
 
-    .poa-tracker {
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--un-blue);
+      color: #fff;
+      padding: 12px 26px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 15px; }
+
+    .verify-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 30px;
+      margin: -30px auto 40px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    }
+
+    .poa-banner {
       background: var(--un-navy);
-      color: #ffffff;
+      color: #fff;
       padding: 25px;
       border-radius: 8px;
-      margin: 30px 0;
+      margin-bottom: 40px;
     }
 
-    .progress-bar-bg {
-      background: #1e293b;
-      height: 14px;
-      border-radius: 7px;
-      overflow: hidden;
-      margin: 12px 0;
-    }
-
-    .progress-bar-fill {
-      background: var(--un-blue);
-      height: 100%;
-      width: 79%;
-    }
-
-    .nav-portal-btn {
-      background-color: var(--emerald-green);
-      color: #ffffff !important;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-weight: 700;
-    }
-
-    .quick-sample-tag {
-      background: #e2e8f0;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      color: var(--un-navy);
-    }
-
-    @media (max-width: 640px) {
-      .tier-steps { flex-direction: column; align-items: flex-start; }
-    }
+    .progress-bar-bg { background: #1e293b; height: 12px; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .progress-bar-fill { background: var(--un-blue); height: 100%; width: 79%; }
   </style>
 </head>
 <body>
 
-<!-- NAVIGATION HEADER -->
 <header class="header">
   <h1>Earth Carbon Foundation</h1>
   <nav>
     <a href="#">Home</a>
-    <a href="#poa-tracker">PoA Pipeline</a>
-    <a href="#verify-section">Verify Certificate</a>
-    <a href="#process">Process</a>
-    <a href="/school-register" class="nav-portal-btn">School Portal / Sign In</a>
+    <a href="#verify">Verify Certificate</a>
+    <a href="#poa">PoA Tracker</a>
+    <a href="/school-register" style="color:var(--emerald-green); font-weight:700;">School Portal</a>
   </nav>
 </header>
 
-<!-- HERO SECTION -->
-<section class="hero">
-  <div class="hero-content">
-    <h2>Global Climate Registry for Institutions &amp; Renewable Energy</h2>
-    <p>Measure Your Atmanirbhar Index™ | Verify Baseline Emissions | Aggregate Carbon Credits</p>
-    <div class="hero-btn-group">
-      <a class="btn" href="/school-register" style="background: var(--emerald-green);">🏫 Register Your Institution</a>
-      <a class="btn secondary" href="#verify-section">🔍 Verify an Asset Record</a>
+<!-- HERO -->
+<section class="hero-clean">
+  <div class="container">
+    <h2>Empowering Educational Institutions Toward Net-Zero</h2>
+    <p>Register your campus solar assets, measure your Atmanirbhar Index™ Score, and access verified carbon credit pooling.</p>
+    <div class="btn-group">
+      <a class="btn-main" href="/school-register">🏫 Register Your Institution</a>
+      <a class="btn-secondary" href="#verify">🔍 Verify a Certificate</a>
     </div>
   </div>
 </section>
 
-<!-- UX THREE-STEP JOURNEY BANNER -->
-<div class="container" style="padding: 0 15px;">
-  <div class="ux-flow-banner">
-    <h4 style="text-align:center; color: var(--un-navy); margin: 0 0 15px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">
-      How Institution Registration Works
-    </h4>
-    <div class="ux-flow-steps">
-      <div class="ux-step-card">
-        <div class="ux-step-num">1</div>
-        <strong style="color:var(--un-navy); font-size: 0.9rem;">Sign In / Auth</strong>
-        <p style="font-size: 0.8rem; color: var(--slate-gray); margin: 5px 0 0 0;">Authenticate using Google or official institutional email.</p>
-      </div>
-      <div class="ux-step-card">
-        <div class="ux-step-num">2</div>
-        <strong style="color:var(--un-navy); font-size: 0.9rem;">Enter Baseline Metrics</strong>
-        <p style="font-size: 0.8rem; color: var(--slate-gray); margin: 5px 0 0 0;">Provide solar capacity (kW), generation, water, &amp; waste stats.</p>
-      </div>
-      <div class="ux-step-card">
-        <div class="ux-step-num">3</div>
-        <strong style="color:var(--un-navy); font-size: 0.9rem;">Instant Certificate &amp; ID</strong>
-        <p style="font-size: 0.8rem; color: var(--slate-gray); margin: 5px 0 0 0;">Get your verified Registry ID, Atmanirbhar Score, &amp; Certificate.</p>
+<!-- VERIFICATION CARD -->
+<div class="container" id="verify">
+  <div class="verify-card">
+    <h3 style="margin-top:0; color:var(--un-navy); text-align:center;">Public Asset Verification Portal</h3>
+    <p style="text-align:center; color:var(--slate-gray); font-size:0.9rem; margin-bottom:20px;">
+      Enter any SHA-256 verified Registry ID (e.g., <strong>ECF-SCH-0047</strong>)
+    </p>
+
+    <div style="display:flex; gap:10px; max-width:550px; margin:0 auto 15px auto;">
+      <input type="text" id="lookupId" placeholder="Enter Registry ID (e.g., ECF-SCH-0047)" style="flex:1; padding:12px; border:1px solid #cbd5e1; border-radius:6px;">
+      <button class="btn-main" onclick="checkAsset()" style="cursor:pointer; border:none;">Verify</button>
+    </div>
+
+    <!-- RESULT DISPLAY -->
+    <div id="resultBox" style="display:none; margin-top:20px; background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+      <span style="color:var(--emerald-green); font-weight:800; font-size:0.8rem;">✔ VERIFIED REGISTRY RECORD</span>
+      <h4 id="resName" style="color:var(--un-navy); margin:5px 0;">C N VIDYALAYA</h4>
+      <p style="margin:0; font-size:0.85rem; color:var(--slate-gray);">Location: Ahmedabad | Status: Tier 2 Verified</p>
+      <div style="margin-top:10px; font-size:0.9rem; font-weight:700; color:var(--un-navy);">
+        Atmanirbhar Index™ Score: <span style="color:var(--emerald-green);" id="resScore">97%</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- LIVE ASSET VERIFICATION PORTAL (PRIMARY TOOL) -->
-<section id="verify-section" class="section bg-alt" style="background:#f8fafc; padding: 40px 15px;">
-  <div class="container" style="max-width: 1100px; margin: 0 auto;">
-    <h3 style="text-align:center; margin-bottom: 5px;">Public Asset Verification Portal</h3>
-    <p style="text-align:center; color: var(--slate-gray); margin-bottom: 20px; font-size: 0.9rem;">
-      Search any SHA-256 verified asset record to inspect its NRBS™ status and Atmanirbhar Index™ Score.
-    </p>
-
-    <!-- SEARCH BAR -->
-    <div style="max-width: 600px; margin: 0 auto 10px auto; display:flex; gap:10px;">
-      <input type="text" id="summaryIdInput" placeholder="Enter Registry ID (e.g., ECF-SCH-0025)" style="flex:1; padding: 12px; border:1px solid #cbd5e1; border-radius:4px; font-size:0.95rem;">
-      <button class="btn" onclick="lookupRegistryAsset()" style="padding: 12px 24px;">Verify</button>
+<!-- POA BATCH ACCUMULATOR -->
+<div class="container" id="poa">
+  <div class="poa-banner">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+      <h3 style="margin:0; color:#fff;">PoA Bundled Capacity Accumulator (Cluster #04)</h3>
+      <span style="color:#38bdf8; font-weight:700;">11.85 MW / 15.00 MW Threshold</span>
     </div>
-
-    <!-- QUICK SAMPLES -->
-    <div style="text-align:center; margin-bottom: 25px; font-size:0.8rem; color:var(--slate-gray);">
-      Try sample IDs: 
-      <span class="quick-sample-tag" onclick="loadSample('ECF-SCH-0025')">ECF-SCH-0025</span>
-      <span class="quick-sample-tag" onclick="loadSample('ECF-IND-0102')">ECF-IND-0102</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill"></div>
     </div>
-
-    <!-- VERIFIED ASSET DISPLAY CARD -->
-    <div id="registryDisplayCard" style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:25px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
-      
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; border-bottom:1px solid #e2e8f0; padding-bottom:15px; margin-bottom:20px;">
-        <div>
-          <span style="font-size:0.75rem; font-weight:800; color:var(--un-blue); letter-spacing:1px; text-transform:uppercase;">Verified Registry Asset Record</span>
-          <h4 id="assetOrgName" style="font-size:1.4rem; color:var(--un-navy); margin:2px 0;">Gujarat Law Society (Ellisbridge Campus)</h4>
-          <span id="assetSummaryId" style="font-size:0.85rem; font-weight:700; color:var(--emerald-green);">ID: ECF-SCH-0025</span>
-        </div>
-        <div style="text-align:right;">
-          <span style="font-size:0.75rem; color:var(--slate-gray); block;">Cryptographic Signature</span>
-          <code style="font-size:0.75rem; background:#f1f5f9; padding:3px 6px; border-radius:4px; color:#334155;">0x8f3a9b2c...SHA-256</code>
-        </div>
-      </div>
-
-      <!-- 3-TIER PROGRESSION PIPELINE -->
-      <div class="tier-pipeline">
-        <h5 style="margin:0 0 10px 0; font-size:0.75rem; text-transform:uppercase; color:var(--slate-gray); letter-spacing:1px;">Lifecycle Status</h5>
-        <div class="tier-steps">
-          <div class="tier-step active" id="tier1Tag">● Tier 1: Self-Reported Intake</div>
-          <div style="color:var(--un-blue); font-weight:800;">→</div>
-          <div class="tier-step active" id="tier2Tag">● Tier 2: NRBS™ Audit-Verified</div>
-          <div style="color:var(--un-blue); font-weight:800;">→</div>
-          <div class="tier-step" id="tier3Tag">○ Tier 3: PoA Credit Pooled</div>
-        </div>
-      </div>
-
-      <!-- ATMANIRBHAR SCORECARD & CIF CORE METRICS -->
-      <div style="display:grid; grid-template-columns: 1fr 2fr; gap:20px; flex-wrap:wrap;">
-        
-        <div class="atmanirbhar-box">
-          <span style="font-size:0.75rem; font-weight:800; color:#065f46; letter-spacing:1px;">ATMANIRBHAR INDEX™</span>
-          <div class="atmanirbhar-score" id="assetAtmanirbharScore">99%</div>
-          <p style="font-size:0.85rem; color:#047857; font-weight:600; margin:0;">Resource Self-Sustaining Rate</p>
-          <span style="font-size:0.75rem; color:#059669; margin-top:8px; display:block;">Energy: 100% | Water: 95%</span>
-        </div>
-
-        <div>
-          <h5 style="margin:0 0 10px 0; font-size:0.75rem; text-transform:uppercase; color:var(--slate-gray); letter-spacing:1px;">CIF Decarbonization Indicators</h5>
-          <div class="cif-metrics-grid">
-            <div class="cif-metric-card">
-              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">INSTALLED CAPACITY</div>
-              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetCapacity">23.00 kW</div>
-            </div>
-            <div class="cif-metric-card">
-              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">ANNUAL GENERATION</div>
-              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetKwh">30,948 kWh/yr</div>
-            </div>
-            <div class="cif-metric-card">
-              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">ANNUAL MITIGATION</div>
-              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetTco2e">6,167 tCO₂e</div>
-            </div>
-            <div class="cif-metric-card">
-              <div style="font-size:0.7rem; color:var(--slate-gray); font-weight:700;">MATERIAL EFFICIENCY</div>
-              <div style="font-size:1.1rem; font-weight:800; color:var(--un-navy);" id="assetWaste">60 kg Waste Div.</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- COMPLIANCE TAGS -->
-      <div style="margin-top:20px; padding-top:15px; border-top:1px dashed #cbd5e1; display:flex; gap:10px; flex-wrap:wrap; font-size:0.8rem;">
-        <span style="background:#e0f2fe; color:var(--un-navy); padding:4px 10px; border-radius:4px; font-weight:600;">✔ Scope 2 Accounting</span>
-        <span style="background:#e0f2fe; color:var(--un-navy); padding:4px 10px; border-radius:4px; font-weight:600;">✔ BRSR / GRI Aligned</span>
-        <span style="background:#d1fae5; color:#065f46; padding:4px 10px; border-radius:4px; font-weight:600;">✔ PoA Batch Eligible (#04)</span>
-      </div>
-
-    </div>
+    <p style="margin:5px 0 0 0; font-size:0.85rem; color:#cbd5e1;">Aggregating 142 school &amp; community solar rooftops toward institutional carbon credit pooling.</p>
   </div>
-</section>
+</div>
 
-<!-- PROGRAMMATIC CARBON ACCUMULATOR (POA TRACKER) -->
-<section id="poa-tracker" class="section">
-  <div class="container" style="max-width: 1100px; margin: 0 auto;">
-    <div class="poa-tracker">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <h3 style="margin:0; color:#fff; font-size:1.3rem;">PoA Bundled Capacity Accumulator (Cluster #04)</h3>
-        <button class="btn" style="background:var(--emerald-green); font-size:0.85rem; padding:8px 16px;" onclick="exportPoABatchCSV()">📥 Export VVB Audit File (.CSV)</button>
-      </div>
-      <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">Aggregating decentralized sub-projects (25 kW–1000 kW) toward institutional credit pooling.</p>
-
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill"></div>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
-        <span>Current Pooled Capacity: <strong style="color:#38bdf8;">11.85 MW</strong></span>
-        <span>Target Threshold: <strong>15.00 MW</strong> (79% Complete)</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <p>© Earth Carbon Foundation</p>
-  <p>One Earth. One Family. One Climate Responsibility.</p>
+  <p>© Earth Carbon Foundation | One Earth. One Family. One Climate Responsibility.</p>
 </footer>
 
-<!-- INTERACTIVE SCRIPTS -->
 <script>
-  function loadSample(sampleId) {
-    document.getElementById('summaryIdInput').value = sampleId;
-    lookupRegistryAsset();
-  }
-
-  function lookupRegistryAsset() {
-    const inputId = document.getElementById('summaryIdInput').value.trim().toUpperCase();
-    if (!inputId) {
-      alert("Please enter a valid Registry ID");
-      return;
-    }
+  function checkAsset() {
+    const id = document.getElementById('lookupId').value.trim().toUpperCase();
+    if (!id) { alert("Please enter a Registry ID"); return; }
     
-    document.getElementById('assetSummaryId').innerText = "ID: " + inputId;
-
-    if (inputId === 'ECF-IND-0102') {
-      document.getElementById('assetOrgName').innerText = "Baroda Heavy Industrial Facility Unit 2";
-      document.getElementById('assetCapacity').innerText = "500.00 kW";
-      document.getElementById('assetKwh').innerText = "720,000 kWh/yr";
-      document.getElementById('assetTco2e').innerText = "14,200 tCO₂e";
-      document.getElementById('assetWaste').innerText = "1,200 kg Waste Div.";
-      document.getElementById('assetAtmanirbharScore').innerText = "88%";
+    document.getElementById('resultBox').style.display = 'block';
+    if (id === 'ECF-SCH-0047' || id === 'CAF-SCH-0047') {
+      document.getElementById('resName').innerText = "C N VIDYALAYA";
+      document.getElementById('resScore').innerText = "97%";
     } else {
-      document.getElementById('assetOrgName').innerText = "Gujarat Law Society (Ellisbridge Campus)";
-      document.getElementById('assetCapacity').innerText = "23.00 kW";
-      document.getElementById('assetKwh').innerText = "30,948 kWh/yr";
-      document.getElementById('assetTco2e').innerText = "6,167 tCO₂e";
-      document.getElementById('assetWaste').innerText = "60 kg Waste Div.";
-      document.getElementById('assetAtmanirbharScore').innerText = "99%";
+      document.getElementById('resName').innerText = "Gujarat Law Society (Ellisbridge Campus)";
+      document.getElementById('resScore').innerText = "99%";
     }
-  }
-
-  function exportPoABatchCSV() {
-    const csvData = [
-      ["Registry_ID", "Site_Name", "Capacity_kW", "Annual_kWh", "Annual_tCO2e", "Tier_Status"],
-      ["ECF-SCH-0025", "GLS School", "23.0", "30948", "6167.4", "Tier 2"],
-      ["ECF-IND-0102", "Baroda Steel Unit 2", "500.0", "720000", "14200.0", "Tier 2"]
-    ];
-
-    let csvContent = "data:text/csv;charset=utf-8," + csvData.map(e => e.join(",")).join("\n");
-    let link = document.createElement("a");
-    link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", "PoA_Solar_Batch_04_Audit.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   }
 </script>
 
