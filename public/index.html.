@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Earth Carbon Foundation | Climate Asset Registry</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    :root {
+      --un-blue: #009edb;
+      --un-navy: #002b49;
+      --emerald-green: #059669;
+      --slate-gray: #64748b;
+    }
+
+    body { font-family: 'Poppins', sans-serif; background: #f8fafc; margin: 0; color: #1e293b; }
+    
+    .hero-clean {
+      background: linear-gradient(135deg, var(--un-navy) 0%, #001a2c 100%);
+      color: #fff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .hero-clean h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+    .hero-clean p { font-size: 1.05rem; color: #cbd5e1; max-width: 700px; margin: 0 auto 25px auto; }
+
+    .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    
+    .btn-main {
+      background: var(--emerald-green);
+      color: #fff;
+      padding: 12px 26px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--un-blue);
+      color: #fff;
+      padding: 12px 26px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 15px; }
+
+    .verify-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 30px;
+      margin: -30px auto 40px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    }
+
+    .poa-banner {
+      background: var(--un-navy);
+      color: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 40px;
+    }
+
+    .progress-bar-bg { background: #1e293b; height: 12px; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+    .progress-bar-fill { background: var(--un-blue); height: 100%; width: 79%; }
+
+    /* GATEWAY CARDS STYLING */
+    .gateway-card {
+      border: 2px solid #e2e8f0;
+      padding: 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      color: #1e293b;
+      text-align: left;
+    }
+
+    .gateway-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Earth Carbon Foundation</h1>
+  <nav style="display:flex; align-items:center; gap:15px;">
+    <a href="#">Home</a>
+    <a href="#verify">Verify Certificate</a>
+    <a href="#poa">PoA Tracker</a>
+    <a href="/school-register" style="color:var(--emerald-green); font-weight:700;">School Portal</a>
+    
+    <!-- AUTHENTICATED USER STATUS BAR -->
+    <div id="userNavStatus" style="display:none; align-items:center; gap:10px; background:rgba(255,255,255,0.1); padding:4px 12px; border-radius:20px;">
+      <span id="navUserName" style="font-size:0.8rem; font-weight:600; color:#fff;"></span>
+      <button onclick="handleSignOut()" style="background:#ef4444; color:#fff; border:none; border-radius:4px; padding:3px 8px; font-size:0.75rem; cursor:pointer;">Sign Out</button>
+    </div>
+  </nav>
+</header>
+
+<!-- STAGE 1: DEFAULT HERO (SHOWN WHEN NOT LOGGED IN) -->
+<section class="hero-clean" id="publicHeroSection">
+  <div class="container">
+    <h2>Empowering Educational Institutions Toward Net-Zero</h2>
+    <p>Register your campus solar assets, measure your Atmanirbhar Index™ Score, and access verified carbon credit pooling.</p>
+    <div class="btn-group">
+      <button class="btn-main" onclick="handleGoogleLogin()">🔑 Sign In / Register with Google</button>
+      <a class="btn-secondary" href="#verify">🔍 Verify a Certificate</a>
+    </div>
+  </div>
+</section>
+
+<!-- STAGE 2: WELCOME GATEWAY (SHOWN IMMEDIATELY AFTER LOG IN) -->
+<section class="hero-clean" id="welcomeGatewaySection" style="display:none; background:#f8fafc; padding:40px 20px;">
+  <div class="container" style="max-width:850px;">
+    <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:35px; box-shadow:0 6px 25px rgba(0,0,0,0.05);">
+      <h2 style="color:var(--un-navy); margin-top:0; font-size:1.8rem;">Welcome to Earth Carbon Registry 👋</h2>
+      <p style="color:var(--slate-gray); font-size:0.95rem; margin-bottom:30px;" id="welcomeUserSubtext">
+        Signed in as <strong>institution@school.edu</strong>
+      </p>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+        
+        <!-- PATHWAY A: RETURNING USER -->
+        <div class="gateway-card" onclick="window.location.href='/dashboard'" onmouseover="this.style.borderColor='var(--un-blue)'" onmouseout="this.style.borderColor='#e2e8f0'">
+          <div style="font-size:2.2rem; margin-bottom:8px;">📊</div>
+          <h3 style="color:var(--un-navy); margin:0 0 6px 0; font-size:1.15rem;">Returning Institution</h3>
+          <p style="color:var(--slate-gray); font-size:0.85rem; margin:0; line-height:1.4;">
+            Access saved assets, download your official <strong>NRBS™ Certificate</strong>, or check carbon credit pooling (PoA) status.
+          </p>
+          <button style="margin-top:18px; width:100%; padding:10px; background:var(--un-navy); color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">
+            Go to My Dashboard →
+          </button>
+        </div>
+
+        <!-- PATHWAY B: NEW USER / NEW CAMPUS -->
+        <div class="gateway-card" onclick="window.location.href='/school-register'" onmouseover="this.style.borderColor='var(--emerald-green)'" onmouseout="this.style.borderColor='#e2e8f0'">
+          <div style="font-size:2.2rem; margin-bottom:8px;">🏫</div>
+          <h3 style="color:var(--un-navy); margin:0 0 6px 0; font-size:1.15rem;">New Campus Registration</h3>
+          <p style="color:var(--slate-gray); font-size:0.85rem; margin:0; line-height:1.4;">
+            Register a new institution, run automated GPS/pincode detection, compute <strong>Atmanirbhar Index™ Score</strong>, and obtain ECF ID.
+          </p>
+          <button style="margin-top:18px; width:100%; padding:10px; background:var(--emerald-green); color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">
+            Start New Registration →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VERIFICATION CARD -->
+<div class="container" id="verify">
+  <div class="verify-card">
+    <h3 style="margin-top:0; color:var(--un-navy); text-align:center;">Public Asset Verification Portal</h3>
+    <p style="text-align:center; color:var(--slate-gray); font-size:0.9rem; margin-bottom:20px;">
+      Enter any SHA-256 verified Registry ID (e.g., <strong>ECF-SCH-0047</strong>)
+    </p>
+
+    <div style="display:flex; gap:10px; max-width:550px; margin:0 auto 15px auto;">
+      <input type="text" id="lookupId" placeholder="Enter Registry ID (e.g., ECF-SCH-0047)" style="flex:1; padding:12px; border:1px solid #cbd5e1; border-radius:6px;">
+      <button class="btn-main" onclick="checkAsset()">Verify</button>
+    </div>
+
+    <!-- RESULT DISPLAY -->
+    <div id="resultBox" style="display:none; margin-top:20px; background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+      <span style="color:var(--emerald-green); font-weight:800; font-size:0.8rem;">✔ VERIFIED REGISTRY RECORD</span>
+      <h4 id="resName" style="color:var(--un-navy); margin:5px 0;">C N VIDYALAYA</h4>
+      <p style="margin:0; font-size:0.85rem; color:var(--slate-gray);">Location: Ahmedabad | Status: Tier 2 Verified</p>
+      <div style="margin-top:10px; font-size:0.9rem; font-weight:700; color:var(--un-navy);">
+        Atmanirbhar Index™ Score: <span style="color:var(--emerald-green);" id="resScore">97%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POA BATCH ACCUMULATOR -->
+<div class="container" id="poa">
+  <div class="poa-banner">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+      <h3 style="margin:0; color:#fff;">PoA Bundled Capacity Accumulator (Cluster #04)</h3>
+      <span style="color:#38bdf8; font-weight:700;">11.85 MW / 15.00 MW Threshold</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <p style="margin:5px 0 0 0; font-size:0.85rem; color:#cbd5e1;">Aggregating 142 school &amp; community solar rooftops toward institutional carbon credit pooling.</p>
+  </div>
+</div>
+
+<footer>
+  <p>© Earth Carbon Foundation | One Earth. One Family. One Climate Responsibility.</p>
+</footer>
+
+<!-- FIREBASE AUTHENTICATION MODULE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    authDomain: "earthcarbonregistry-1e6ba.firebaseapp.com",
+    projectId: "earthcarbonregistry-1e6ba",
+    storageBucket: "earthcarbonregistry-1e6ba.appspot.com",
+    messagingSenderId: "217692090833",
+    appId: "1:217692090833:web:registry"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // AUTH STATE LISTENER (Bypasses legacy profile and displays Welcome Gateway)
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('publicHeroSection').style.display = 'none';
+      document.getElementById('welcomeGatewaySection').style.display = 'block';
+      
+      document.getElementById('userNavStatus').style.display = 'flex';
+      document.getElementById('navUserName').innerText = user.displayName || user.email;
+      document.getElementById('welcomeUserSubtext').innerHTML = `Signed in as <strong>${user.displayName || 'User'}</strong> (${user.email})`;
+    } else {
+      document.getElementById('publicHeroSection').style.display = 'block';
+      document.getElementById('welcomeGatewaySection').style.display = 'none';
+      document.getElementById('userNavStatus').style.display = 'none';
+    }
+  });
+
+  window.handleGoogleLogin = function() {
+    signInWithPopup(auth, provider).catch(err => alert("Sign-in error: " + err.message));
+  };
+
+  window.handleSignOut = function() {
+    signOut(auth);
+  };
+</script>
+
+<!-- PUBLIC ASSET LOOKUP LOGIC -->
+<script>
+  function checkAsset() {
+    const id = document.getElementById('lookupId').value.trim().toUpperCase();
+    if (!id) { alert("Please enter a Registry ID"); return; }
+    
+    document.getElementById('resultBox').style.display = 'block';
+    if (id === 'ECF-SCH-0047' || id === 'CAF-SCH-0047') {
+      document.getElementById('resName').innerText = "C N VIDYALAYA";
+      document.getElementById('resScore').innerText = "97%";
+    } else {
+      document.getElementById('resName').innerText = "Gujarat Law Society (Ellisbridge Campus)";
+      document.getElementById('resScore').innerText = "99%";
+    }
+  }
+</script>
+
+</body>
+</html>
