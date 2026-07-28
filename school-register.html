@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>School & Institution Asset Registration | Earth Carbon Foundation</title>
+  <title>School &amp; Institution Asset Registration | Earth Carbon Foundation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
@@ -17,7 +17,7 @@
     body { font-family: 'Poppins', sans-serif; background: #f8fafc; color: #1e293b; margin: 0; }
     
     .register-container {
-      max-width: 800px;
+      max-width: 850px;
       margin: 40px auto;
       background: #ffffff;
       padding: 35px;
@@ -75,6 +75,14 @@
       box-shadow: 0 6px 15px rgba(0,0,0,0.05);
     }
 
+    .poa-banner {
+      background: var(--un-navy);
+      color: #fff;
+      padding: 18px 22px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+
     .atmanirbhar-result-box {
       background: #ecfdf5;
       border: 2px solid #a7f3d0;
@@ -89,6 +97,35 @@
       font-weight: 800;
       color: var(--emerald-green);
       line-height: 1;
+    }
+
+    .kpi-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .kpi-card-small {
+      background: #f8fafc;
+      padding: 14px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.85rem;
+    }
+
+    .kpi-card-small label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--slate-gray);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .kpi-card-small span {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--un-navy);
     }
   </style>
 </head>
@@ -116,7 +153,7 @@
       <strong style="color:var(--un-navy);">Before You Begin:</strong>
       <ul style="margin:5px 0 0 0; padding-left:20px; font-size:0.85rem; color:#0369a1;">
         <li>Preparation time: ~3 minutes</li>
-        <li>Requirements: Solar Capacity (kW), Energy Generation (kWh), &amp; Water/Waste Metrics</li>
+        <li>Requirements: Solar Capacity (kW), Annual Energy Generation (kWh), &amp; Water/Waste Metrics</li>
       </ul>
     </div>
 
@@ -147,12 +184,24 @@
     </div>
   </div>
 
-  <!-- STAGE 2: INTAKE FORM WITH DYNAMIC PROGRESS BAR -->
+  <!-- STAGE 2: INTAKE FORM WITH DYNAMIC PROGRESS BAR & GEO-AUTOMATION -->
   <div id="intakeFormSection" style="display:none;">
     
+    <!-- POA BUNDLED ACCUMULATOR -->
+    <div class="poa-banner">
+      <div style="display:flex; justify-style:space-between; align-items:center; flex-wrap:wrap; font-size:0.85rem;">
+        <span style="font-weight:700;">PoA Regional Cluster Pooling Target</span>
+        <span style="color:#38bdf8; font-weight:800;">11.85 MW / 15.00 MW (79%)</span>
+      </div>
+      <div style="background:#1e293b; height:8px; border-radius:4px; overflow:hidden; margin-top:8px;">
+        <div style="background:var(--un-blue); height:100%; width:79%;"></div>
+      </div>
+    </div>
+
+    <!-- DYNAMIC PROGRESS BAR -->
     <div id="progressBarContainer" style="margin-bottom:25px; background:#f1f5f9; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
       <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700; color:var(--un-navy); margin-bottom:8px;">
-        <span id="progressStepLabel">Step 1 of 3: Campus Identification</span>
+        <span id="progressStepLabel">Step 1 of 3: Campus Identity &amp; Location</span>
         <span id="progressPercentage" style="color:var(--emerald-green);">33% Completed</span>
       </div>
       <div style="background:#cbd5e1; height:10px; border-radius:5px; overflow:hidden;">
@@ -163,7 +212,7 @@
     <form id="schoolRegistrationForm">
       <!-- STEP 1 -->
       <div id="step1Fields">
-        <h3 style="color:var(--un-navy); margin-top:0;">Institution Identification</h3>
+        <h3 style="color:var(--un-navy); margin-top:0;">Institution Identification &amp; Coordinates</h3>
         <div class="form-group">
           <label>School / Institution Full Name *</label>
           <input type="text" id="institutionName" placeholder="e.g., New Sharda Mandir School" required>
@@ -173,13 +222,28 @@
           <label>PINCODE *</label>
           <input type="text" id="pincodeInput" maxlength="6" placeholder="e.g., 380015" required>
         </div>
-        <div class="form-group">
-          <label>CITY *</label>
-          <input type="text" id="cityInput" placeholder="Enter City (Auto-fills on pincode)" required>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label>CITY *</label>
+            <input type="text" id="cityInput" placeholder="Auto-fills on pincode" required>
+          </div>
+          <div class="form-group">
+            <label>STATE *</label>
+            <input type="text" id="stateInput" placeholder="Auto-fills on pincode" required>
+          </div>
         </div>
+
+        <!-- AUTOMATED GEOLOCATION API -->
         <div class="form-group">
-          <label>STATE *</label>
-          <input type="text" id="stateInput" placeholder="Enter State (Auto-fills on pincode)" required>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="margin:0;">GPS COORDINATES (LAT, LONG) *</label>
+            <button type="button" style="background:none; border:none; color:var(--un-blue); font-weight:700; font-size:0.75rem; cursor:pointer;" onclick="detectGeoLocation()">📍 Detect GPS Location</button>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <input type="text" id="latInput" placeholder="Latitude (e.g., 23.0225)">
+            <input type="text" id="longInput" placeholder="Longitude (e.g., 72.5714)">
+          </div>
         </div>
 
         <div class="form-group">
@@ -232,24 +296,45 @@
     </form>
   </div>
 
-  <!-- STAGE 3: GENERATED RESULT -->
+  <!-- STAGE 3: GENERATED RESULT & CERTIFICATE DASHBOARD -->
   <div id="dashboardSection" style="display:none;">
-    <span style="background:#d1fae5; color:#065f46; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:4px;">✔ VERIFIED REGISTRY RECORD</span>
-    <h2 id="dashOrgName" style="color:var(--un-navy); margin:10px 0 2px 0;">New Sharda Mandir School</h2>
-    <span id="dashRegistryId" style="color:var(--emerald-green); font-weight:700; font-size:0.9rem;">ID: ECF-SCH-0050</span>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;">
+      <div>
+        <span style="background:#d1fae5; color:#065f46; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:4px;">✔ VERIFIED REGISTRY RECORD</span>
+        <h2 id="dashOrgName" style="color:var(--un-navy); margin:10px 0 2px 0;">New Sharda Mandir School</h2>
+        <span id="dashRegistryId" style="color:var(--emerald-green); font-weight:700; font-size:0.9rem;">ID: ECF-SCH-0050</span>
+      </div>
+      <!-- DYNAMIC QR CODE -->
+      <div style="text-align:center;">
+        <img id="qrCodeImg" src="" alt="Registry Verification QR" style="width:100px; height:100px; border:1px solid #cbd5e1; border-radius:6px; padding:4px;">
+        <div style="font-size:0.65rem; color:var(--slate-gray); font-weight:700; margin-top:2px;">SCAN TO VERIFY</div>
+      </div>
+    </div>
 
+    <!-- ATMANIRBHAR SCORE -->
     <div class="atmanirbhar-result-box">
       <span style="font-size:0.8rem; font-weight:800; color:#065f46; letter-spacing:1px;">CALCULATED ATMANIRBHAR INDEX™</span>
       <div class="atmanirbhar-score-large" id="dashAtmanirbharScore">98%</div>
       <p style="color:#047857; font-weight:600; margin:5px 0 0 0; font-size:0.9rem;">Resource Self-Sustaining Compliance Rate</p>
     </div>
 
-    <div style="margin-top:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px; font-size:0.85rem;">
-      <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
-        <strong>Installed Solar:</strong> <span id="dashKw">20.0 kW</span>
+    <!-- EXPANDED WORLD CLASS KPIS -->
+    <div class="kpi-card-grid">
+      <div class="kpi-card-small">
+        <label>Installed Solar</label>
+        <span id="dashKw">20.0 kW</span>
       </div>
-      <div style="background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
-        <strong>Verified Mitigation:</strong> <span id="dashTco2e">20.35 tCO₂e/yr</span>
+      <div class="kpi-card-small">
+        <label>Annual Mitigation</label>
+        <span id="dashTco2e" style="color:var(--emerald-green);">20.35 tCO₂e/yr</span>
+      </div>
+      <div class="kpi-card-small">
+        <label>10-Yr Lifetime Impact</label>
+        <span id="dashLifetimeTco2e">203.5 tCO₂e</span>
+      </div>
+      <div class="kpi-card-small">
+        <label>Per Capita Offset</label>
+        <span id="dashPerCapita">29.5 kg/person</span>
       </div>
     </div>
 
@@ -293,7 +378,7 @@
   };
 </script>
 
-<!-- APPLICATION & MATH LOGIC -->
+<!-- APPLICATION, GEOLOCATION & MATH LOGIC -->
 <script>
   function startNewRegistration() {
     document.getElementById('userGatewaySection').style.display = 'none';
@@ -315,11 +400,26 @@
     document.getElementById('progressPercentage').innerText = percentage + "% Completed";
 
     if (stepNum === 1) {
-      document.getElementById('progressStepLabel').innerText = "Step 1 of 3: Campus Identity & Address";
+      document.getElementById('progressStepLabel').innerText = "Step 1 of 3: Campus Identity & Location";
     } else if (stepNum === 2) {
       document.getElementById('progressStepLabel').innerText = "Step 2 of 3: Solar & Clean Energy Capacity";
     } else if (stepNum === 3) {
       document.getElementById('progressStepLabel').innerText = "Step 3 of 3: Water & Circularity Metrics";
+    }
+  }
+
+  // AUTOMATED GPS GEOLOCATION API
+  function detectGeoLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          document.getElementById('latInput').value = position.coords.latitude.toFixed(6);
+          document.getElementById('longInput').value = position.coords.longitude.toFixed(6);
+        },
+        (error) => alert("GPS detection failed or permission denied. Manual entry enabled.")
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
     }
   }
 
@@ -352,23 +452,33 @@
 
   window.addEventListener('DOMContentLoaded', unlockAddressFields);
 
-  // ACCURATE EMISSION MATH ENGINE
+  // ACCURATE EMISSION MATH ENGINE & QR BUILDER
   function submitSchoolForm() {
     const name = document.getElementById('institutionName').value || "New Sharda Mandir School";
     const kw = parseFloat(document.getElementById('solarCapacityKw').value) || 20.0;
+    const pop = parseFloat(document.getElementById('institutionPopulation').value) || 689;
     
     // CEA / MoEF&CC Baseline Emission Calculation: 0.716 kg CO2e / kWh
     const userKwh = parseFloat(document.getElementById('annualKwh').value) || (kw * 1350);
-    const estimatedMitigation = ((userKwh * 0.716) / 1000).toFixed(2); // 28,416 kWh -> 20.35 tCO2e
+    const estimatedMitigation = (userKwh * 0.716) / 1000; // 28,416 kWh -> 20.35 tCO2e
+    const lifetimeMitigation = (estimatedMitigation * 10).toFixed(1);
+    const perCapitaKg = ((estimatedMitigation * 1000) / pop).toFixed(1);
     
     const calculatedScore = Math.min(99, Math.round(85 + (kw * 0.65)));
     const generatedId = "ECF-SCH-0050";
+    const verificationUrl = encodeURIComponent(`https://registryearthcarbon.org/summary/${generatedId}`);
 
+    // POPULATE DASHBOARD & CERTIFICATE
     document.getElementById('dashOrgName').innerText = name;
     document.getElementById('dashRegistryId').innerText = "ID: " + generatedId;
     document.getElementById('dashAtmanirbharScore').innerText = calculatedScore + "%";
     document.getElementById('dashKw').innerText = kw.toFixed(1) + " kW";
-    document.getElementById('dashTco2e').innerText = estimatedMitigation + " tCO₂e/yr";
+    document.getElementById('dashTco2e').innerText = estimatedMitigation.toFixed(2) + " tCO₂e/yr";
+    document.getElementById('dashLifetimeTco2e').innerText = lifetimeMitigation + " tCO₂e";
+    document.getElementById('dashPerCapita').innerText = perCapitaKg + " kg/person";
+
+    // GENERATE LIVE QR CODE VIA GOOGLE CHARTS API
+    document.getElementById('qrCodeImg').src = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${verificationUrl}`;
 
     document.getElementById('intakeFormSection').style.display = 'none';
     document.getElementById('dashboardSection').style.display = 'block';
